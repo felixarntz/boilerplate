@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<ruleset name="PSR-2 Project">
+	<description>Ruleset for a PSR-2 project.</description>
+
+	<file>./_src</file>
+
+	<exclude-pattern type="relative">^/vendor/*</exclude-pattern>
+
+	<arg name="colors"/>
+	<arg value="vs"/>
+
+	<!-- PSR-2 Coding Standard -->
+	<rule ref="PSR2"/>
+
+	<!-- Selected WordPress Coding Standards rules apply -->
+	<rule ref="WordPress-Extra">
+		<exclude name="Generic.Classes"/>
+		<exclude name="Generic.Functions"/>
+		<exclude name="Generic.WhiteSpace.DisallowSpaceIndent"/>
+		<exclude name="PEAR.Functions"/>
+		<exclude name="Squiz.Functions"/>
+		<exclude name="Squiz.PHP.DisallowSizeFunctionsInLoops"/>
+		<exclude name="WordPress.Arrays.ArrayDeclarationSpacing.NoSpaceAfterArrayOpener"/>
+		<exclude name="WordPress.Arrays.ArrayDeclarationSpacing.NoSpaceBeforeArrayCloser"/>
+		<exclude name="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
+		<exclude name="WordPress.DB"/>
+		<exclude name="WordPress.Files"/>
+		<exclude name="WordPress.NamingConventions"/>
+		<exclude name="WordPress.PHP.YodaConditions"/>
+		<exclude name="WordPress.Security"/>
+		<exclude name="WordPress.WhiteSpace"/>
+		<exclude name="WordPress.WP"/>
+		<exclude name="WordPress.WP"/>
+		<exclude name="WordPress.WP"/>
+	</rule>
+	<rule ref="WordPress-Docs"/>
+</ruleset>

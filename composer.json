@@ -1,0 +1,44 @@
+{
+  "name": "felixarntz/boilerplate",
+  "description": "Boilerplate for new libraries, WordPress plugins or themes.",
+  "version": "1.0.0",
+  "license": "GPL-2.0-or-later",
+  "keywords": [
+    "boilerplate"
+  ],
+  "homepage": "https://github.com/felixarntz/boilerplate",
+  "authors": [
+    {
+      "name": "Felix Arntz",
+      "email": "felix-arntz@leaves-and-love.net",
+      "homepage": "https://felix-arntz.me"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/felixarntz/boilerplate/issues"
+  },
+  "config": {
+      "vendor-dir": "_vendor"
+  },
+  "autoload": {
+    "psr-4": {
+      "FelixArntz\\Boilerplate\\": "_src"
+    }
+  },
+  "require": {
+    "php": ">=7.0",
+    "composer/composer": "^1.7",
+    "symfony/finder": "^3.2",
+    "mustache/mustache": "^2.12"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.3",
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.4",
+    "wp-coding-standards/wpcs": "^1"
+  },
+  "scripts":     {
+    "post-create-project-cmd": [
+      "FelixArntz\\Boilerplate\\Setup::run"
+    ]
+  }
+}
