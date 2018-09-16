@@ -123,8 +123,8 @@ $generatedPlaceholders = [
     'codeVendorNamePascalCase'      => function($placeholders) {
         return Util::toPascalCase($placeholders['codeVendorName']['value']);
     },
-    'codeVendorNamePascalCase'      => function($placeholders) {
-        return Util::toPascalCase($placeholders['codeVendorName']['value']);
+    'codeVendorNameCamelCase'       => function($placeholders) {
+        return Util::toCamelCase($placeholders['codeVendorName']['value']);
     },
     'codeVendorNameConstantCase'    => function($placeholders) {
         return Util::toConstantCase($placeholders['codeVendorName']['value']);
@@ -141,11 +141,14 @@ $generatedPlaceholders = [
     'codePackageNamePascalCase'     => function($placeholders) {
         return Util::toPascalCase($placeholders['codePackageName']['value']);
     },
-    'codePackageNamePascalCase'     => function($placeholders) {
-        return Util::toPascalCase($placeholders['codePackageName']['value']);
+    'codePackageNameCamelCase'      => function($placeholders) {
+        return Util::toCamelCase($placeholders['codePackageName']['value']);
     },
     'codePackageNameConstantCase'   => function($placeholders) {
         return Util::toConstantCase($placeholders['codePackageName']['value']);
+    },
+    'packageKeywordsList'           => function($placeholders) {
+        return str_replace(',', ', ', $placeholders['packageKeywords']['value']);
     },
 ];
 
@@ -254,8 +257,94 @@ $settings = [
     ],
 ];
 
+$composerGenerator = function($placeholders, $settings) {
+    switch ($settings['packageType']) {
+        case 'plugin':
+            $type = 'wordpress-plugin';
+            break;
+        case 'theme':
+            $type = 'wordpress-theme';
+            break;
+        default:
+            $type = 'library';
+    }
+
+    $data = [
+        'name'        => $placeholders['vendorNameHyphenCase'] . '/' . $placeholders['packageNameHyphenCase'],
+        'description' => $placeholders['packageDescription'],
+        'version'     => '1.0.0',
+        'license'     => 'GPL-2.0-or-later',
+        'type'        => $type,
+        'keywords'    => explode(',', $placeholders['packageKeywords']),
+        'homepage'    => $placeholders['packageUrl'],
+        'authors'     => [
+            [
+                'name'     => $placeholders['authorName'],
+                'email'    => $placeholders['authorEmail'],
+                'homepage' => $placeholders['authorUrl'],
+            ],
+        ],
+        'support'     => [
+            'issues' => rtrim($placeholders['packageVcsUrl'], '/') . '/issues',
+        ],
+    ];
+
+    // The 'autoload' property.
+    if (version_compare($settings['minimumPHP'], '5.3', '>=')) {
+        $namespace = $placeholders['codeVendorNamePascalCase'] . '\\\\'
+            . $placeholders['codePackageNamePascalCase'] . '\\\\';
+
+        $data['autoload'] = [
+            'psr-4' => [
+                $namespace => 'src',
+            ],
+        ];
+    }
+
+    // The 'require' property.
+    $data['require'] = [
+        'php' => '>=' . $settings['minimumPHP'],
+    ];
+    if (in_array($settings['packageType'], ['plugin', 'theme'], true)) {
+        $data['require']['composer/installers'] = '^1';
+    }
+
+    // The 'require-dev' property.
+    if ($settings['setupCodeStandards'] || $settings['setupUnitTests']) {
+        $data['require-dev'] = [];
+        if ($settings['setupCodeStandards']) {
+            $data['require-dev']['squizlabs/php_codesniffer']                      = '^3.3';
+            $data['require-dev']['dealerdirect/phpcodesniffer-composer-installer'] = '^0.4';
+            $data['require-dev']['wp-coding-standards/wpcs']                       = '^1';
+        }
+        if ($settings['setupUnitTests']) {
+            if (in_array($settings['packageType'], ['plugin', 'theme'], true)) {
+                if (version_compare($settings['minimumPHP'], '7.0', '>=')) {
+                    $phpunitVersion = '^6';
+                } else {
+                    $phpunitVersion = '>4.8.20 <6.0';
+                }
+                $data['require-dev']['phpunit/phpunit'] = $phpunitVersion;
+                $data['require-dev']['brain/monkey']    = '^2';
+            } else {
+                if (version_compare($settings['minimumPHP'], '7.1', '>=')) {
+                    $phpunitVersion = '^7';
+                } elseif (version_compare($settings['minimumPHP'], '7.0', '>=')) {
+                    $phpunitVersion = '^6';
+                } else {
+                    $phpunitVersion = '>=4 <6';
+                }
+                $data['require-dev']['phpunit/phpunit'] = $phpunitVersion;
+            }
+        }
+    }
+
+    return $data;
+};
+
 return [
     'placeholders'          => $placeholders,
     'generatedPlaceholders' => $generatedPlaceholders,
     'settings'              => $settings,
+    'composerGenerator'     => $composerGenerator,
 ];
