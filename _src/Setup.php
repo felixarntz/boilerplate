@@ -12,6 +12,13 @@ namespace FelixArntz\Boilerplate;
 use FelixArntz\Boilerplate\Task\RequestPlaceholderValuesTask;
 use FelixArntz\Boilerplate\Task\RequestSettingValuesTask;
 use FelixArntz\Boilerplate\Task\VerifyConfigurationTask;
+use FelixArntz\Boilerplate\Task\RemoveOriginalFilesTask;
+use FelixArntz\Boilerplate\Task\ReplacePlaceholdersTask;
+use FelixArntz\Boilerplate\Task\MoveTemplateFilesTask;
+use FelixArntz\Boilerplate\Task\GenerateComposerJsonTask;
+use FelixArntz\Boilerplate\Task\RemoveOriginalVersionControlTask;
+use FelixArntz\Boilerplate\Task\InitializeVersionControlTask;
+use FelixArntz\Boilerplate\Task\RemoveOriginalDirectoriesTask;
 use Composer\Script\Event;
 use Exception;
 
@@ -75,15 +82,13 @@ class Setup
             RequestPlaceholderValuesTask::class,
             RequestSettingValuesTask::class,
             VerifyConfigurationTask::class,
-            /*AskAboutProjectParameters::class,
-            VerifyProjectParameters::class,
-            RemoveExistingRootFiles::class,
-            ReplacePlaceholdersInTemplateFiles::class,
-            MoveTemplateFilesToRootFolder::class,
-            RemoveConfigFolder::class,
-            RemoveTemplatesFolder::class,
-            RemoveOriginalVCSData::class,
-            InitializeVCS::class,*/
+            RemoveOriginalFilesTask::class,
+            ReplacePlaceholdersTask::class,
+            MoveTemplateFilesTask::class,
+            GenerateComposerJsonTask::class,
+            RemoveOriginalVersionControlTask::class,
+            InitializeVersionControlTask::class,
+            RemoveOriginalDirectoriesTask::class,
         ];
     }
 

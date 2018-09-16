@@ -9,7 +9,7 @@
 
 namespace FelixArntz\Boilerplate\Task;
 
-use Exception;
+use RuntimeException;
 
 /**
  * Class representing a task that asks the user to provide values for config placeholders.
@@ -36,6 +36,8 @@ class VerifyConfigurationTask extends AbstractTask implements ConfigAware, IOAwa
      * Completes the task.
      *
      * @since 1.0.0
+     *
+     * @throws RuntimeException Thrown when the user does not confirm the configuration.
      */
     public function complete()
     {
@@ -80,7 +82,7 @@ class VerifyConfigurationTask extends AbstractTask implements ConfigAware, IOAwa
 
         $value = $this->io->askConfirmation('<question>Confirm?</question>', true);
         if (!$value) {
-            throw new Exception('Project configuration not confirmed.');
+            throw new RuntimeException('Project configuration not confirmed.');
         }
     }
 }

@@ -44,38 +44,14 @@ class RequestSettingValuesTask extends AbstractTask implements ConfigAware, IOAw
         }
 
         foreach ($this->config['settings'] as $key => $data) {
-            if (isset($data['skip'])) {
-                if (is_callable($data['skip'])) {
-                    if (call_user_func($data['skip'], $this->config['settings'])) {
-                        continue;
-                    }
-                } elseif ($data['skip']) {
-                    continue;
-                }
+            if ($this->shouldSkipSetting($data)) {
+                continue;
             }
 
-            $default = null;
-            if (!empty($data['default'])) {
-                $default = $data['default'];
-                if (is_callable($default)) {
-                    $default = call_user_func($default, $this->config['settings']);
-                }
-            }
+            $default = $this->getSettingDefault($data);
+            $value   = $default;
 
-            $value = $default;
-
-            $question = sprintf('<question>%s</question>', $data['name']);
-            if (!empty($data['description'])) {
-                $question .= ' [' . $data['description'] . ']';
-            }
-            if ($default) {
-                if (empty($data['choices']) && !empty($data['confirm'])) {
-                    $question .= ' <info>Default: "yes"</info>';
-                } else {
-                    $question .= sprintf(' <info>Default: "%s"</info>', $default);
-                }
-            }
-            $question .= ' ? ';
+            $question = $this->getSettingQuestion($data, $default);
 
             if (!empty($data['choices'])) {
                 $proceed = false;
@@ -98,5 +74,73 @@ class RequestSettingValuesTask extends AbstractTask implements ConfigAware, IOAw
 
             $this->config['settings'][$key]['value'] = $value;
         }
+    }
+
+    /**
+     * Checks whether requesting the setting value for the given data should be skipped.
+     *
+     * @since 1.0.0
+     *
+     * @param array $data Data for the setting.
+     * @return bool True if the setting should be skipped, false otherwise.
+     */
+    protected function shouldSkipSetting(array $data) : bool
+    {
+        if (!isset($data['skip'])) {
+            return false;
+        }
+
+        if (is_callable($data['skip'])) {
+            return (bool) call_user_func($data['skip'], $this->config['settings']);
+        }
+
+        return (bool) $data['skip'];
+    }
+
+    /**
+     * Gets the default setting value for the given data.
+     *
+     * @since 1.0.0
+     *
+     * @param array $data Data for the setting.
+     * @return mixed Setting default value.
+     */
+    protected function getSettingDefault(array $data)
+    {
+        if (!isset($data['default'])) {
+            return null;
+        }
+
+        if (is_callable($data['default'])) {
+            return call_user_func($data['default'], $this->config['settings']);
+        }
+
+        return $data['default'];
+    }
+
+    /**
+     * Gets the question to print to the user, including optional information.
+     *
+     * @since 1.0.0
+     *
+     * @param array $data    Data for the setting.
+     * @param mixed $default Optional. Default value for the setting. Default null.
+     * @return string Setting question to ask.
+     */
+    protected function getSettingQuestion(array $data, $default = null) : string
+    {
+        $question = sprintf('<question>%s</question>', $data['name']);
+        if (!empty($data['description'])) {
+            $question .= ' [' . $data['description'] . ']';
+        }
+        if ($default !== null) {
+            if (empty($data['choices']) && !empty($data['confirm'])) {
+                $default = $default ? 'yes' : 'no';
+            }
+            $question .= sprintf(' <info>Default: "%s"</info>', $default);
+        }
+        $question .= ' ? ';
+
+        return $question;
     }
 }

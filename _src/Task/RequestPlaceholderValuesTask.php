@@ -44,24 +44,10 @@ class RequestPlaceholderValuesTask extends AbstractTask implements ConfigAware, 
         }
 
         foreach ($this->config['placeholders'] as $key => $data) {
-            $default = null;
-            if (!empty($data['default'])) {
-                $default = $data['default'];
-                if (is_callable($default)) {
-                    $default = call_user_func($default, $this->config['placeholders']);
-                }
-            }
+            $default = $this->getPlaceholderDefault($data);
+            $value   = $default;
 
-            $value = $default;
-
-            $question = sprintf('<question>%s</question>', $data['name']);
-            if (!empty($data['description'])) {
-                $question .= ' [' . $data['description'] . ']';
-            }
-            if ($default) {
-                $question .= sprintf(' <info>Default: "%s"</info>', $default);
-            }
-            $question .= ' ? ';
+            $question = $this->getPlaceholderQuestion($data, $default);
 
             if (!empty($data['validation'])) {
                 $proceed = false;
@@ -80,5 +66,52 @@ class RequestPlaceholderValuesTask extends AbstractTask implements ConfigAware, 
 
             $this->config['placeholders'][$key]['value'] = $value;
         }
+    }
+
+    /**
+     * Gets the default placeholder value for the given data.
+     *
+     * @since 1.0.0
+     *
+     * @param array $data Data for the placeholder.
+     * @return mixed Placeholder default value.
+     */
+    protected function getPlaceholderDefault(array $data)
+    {
+        if (!isset($data['default'])) {
+            return null;
+        }
+
+        if (is_callable($data['default'])) {
+            return call_user_func($data['default'], $this->config['placeholders']);
+        }
+
+        return $data['default'];
+    }
+
+    /**
+     * Gets the question to print to the user, including optional information.
+     *
+     * @since 1.0.0
+     *
+     * @param array $data    Data for the placeholder.
+     * @param mixed $default Optional. Default value for the placeholder. Default null.
+     * @return string Placeholder question to ask.
+     */
+    protected function getPlaceholderQuestion(array $data, $default = null) : string
+    {
+        $question = sprintf('<question>%s</question>', $data['name']);
+        if (!empty($data['description'])) {
+            $question .= ' [' . $data['description'] . ']';
+        }
+        if ($default !== null) {
+            if (empty($data['choices']) && !empty($data['confirm'])) {
+                $default = $default ? 'yes' : 'no';
+            }
+            $question .= sprintf(' <info>Default: "%s"</info>', $default);
+        }
+        $question .= ' ? ';
+
+        return $question;
     }
 }

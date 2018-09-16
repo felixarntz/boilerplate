@@ -9,6 +9,8 @@
 
 namespace FelixArntz\Boilerplate;
 
+use Composer\Util\Filesystem;
+
 /**
  * Class containing static utility methods.
  *
@@ -18,7 +20,7 @@ class Util
 {
 
     /**
-     * Transforms a regular human-readable name to hyphen-case.
+     * Transforms a regular human-readable name to lower hyphen-case.
      *
      * @since 1.0.0
      *
@@ -31,7 +33,7 @@ class Util
     }
 
     /**
-     * Transforms a regular human-readable name to underscore-case.
+     * Transforms a regular human-readable name to lower underscore-case.
      *
      * @since 1.0.0
      *
@@ -67,6 +69,19 @@ class Util
     public static function toCamelCase(string $name) : string
     {
         return lcfirst(static::toPascalCase($name));
+    }
+
+    /**
+     * Transforms a regular human-readable name to constant-case.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name Input name. Is not checked against invalid characters.
+     * @return string Name in constant-case.
+     */
+    public static function toConstantCase(string $name) : string
+    {
+        return str_replace(' ', '_', strtoupper($name));
     }
 
     /**
@@ -110,5 +125,30 @@ class Util
         }
 
         return $range;
+    }
+
+    /**
+     * Gets the absolute path to the package's root directory.
+     *
+     * @since 1.0.0
+     *
+     * @return string Absolute root directory path, including trailing slash.
+     */
+    public static function getRootPath() : string
+    {
+        return static::getAbsolutePath('');
+    }
+
+    /**
+     * Gets the absolute path to a file within the package directory.
+     *
+     * @since 1.0.0
+     *
+     * @param string $file File path, relative to the package's root directory.
+     * @return string Absolute file path.
+     */
+    public static function getAbsolutePath(string $file) : string
+    {
+        return (new Filesystem())->normalizePath(__DIR__ . '/../' . ltrim($file, '/'));
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="PSR-2 Project">
-	<description>Ruleset for a PSR-2 project.</description>
+<ruleset name="PSR-2 Library">
+	<description>Ruleset for a PSR-2 library.</description>
 
 	<file>./_src</file>
 
@@ -26,6 +26,7 @@
 		<exclude name="WordPress.DB"/>
 		<exclude name="WordPress.Files"/>
 		<exclude name="WordPress.NamingConventions"/>
+		<exclude name="WordPress.PHP.DiscouragedPHPFunctions"/>
 		<exclude name="WordPress.PHP.YodaConditions"/>
 		<exclude name="WordPress.Security"/>
 		<exclude name="WordPress.WhiteSpace"/>

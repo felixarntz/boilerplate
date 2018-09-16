@@ -46,7 +46,7 @@ class Validation
     }
 
     /**
-     * Validates a description, consisting of only alphanumeric characters, commas, hyphens and spaces and ending in a dot.
+     * Validates a description, consisting of alphanumeric characters, commas, hyphens and spaces and ending in a dot.
      *
      * @since 1.0.0
      *

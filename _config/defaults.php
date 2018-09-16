@@ -10,7 +10,7 @@
 namespace FelixArntz\Boilerplate;
 
 $placeholders = [
-    'vendorName'           => [
+    'vendorName'         => [
         'name'        => 'Vendor name',
         'description' => 'The vendor name of the package.',
         'validation'  => function($placeholder) {
@@ -18,8 +18,8 @@ $placeholders = [
         },
         'default'     => 'Felix Arntz',
     ],
-    'namespaceVendorName'  => [
-        'name'        => 'Namespace vendor name',
+    'codeVendorName'     => [
+        'name'        => 'Code vendor name',
         'description' => 'The vendor name of the package, for use within the source code, if different.',
         'validation'  => function($placeholder) {
             return Validation::validateName($placeholder);
@@ -28,7 +28,7 @@ $placeholders = [
             return $placeholders['vendorName']['value'];
         },
     ],
-    'packageName'          => [
+    'packageName'        => [
         'name'        => 'Package name',
         'description' => 'The name of the package.',
         'validation'  => function($placeholder) {
@@ -36,8 +36,8 @@ $placeholders = [
         },
         'default'     => 'Package Name',
     ],
-    'namespacePackageName' => [
-        'name'        => 'Namespace package name',
+    'codePackageName'    => [
+        'name'        => 'Code package name',
         'description' => 'The name of the package, for use within the source code, if different.',
         'validation'  => function($placeholder) {
             return Validation::validateName($placeholder);
@@ -46,7 +46,7 @@ $placeholders = [
             return $placeholders['packageName']['value'];
         },
     ],
-    'packageDescription'   => [
+    'packageDescription' => [
         'name'        => 'Package description',
         'description' => 'The description of the package.',
         'validation'  => function($placeholder) {
@@ -54,7 +54,7 @@ $placeholders = [
         },
         'default'     => 'The package description.',
     ],
-    'packageKeywords'      => [
+    'packageKeywords'    => [
         'name'        => 'Package keywords',
         'description' => 'The keywords of the package, separated by comma.',
         'validation'  => function($placeholder) {
@@ -62,7 +62,7 @@ $placeholders = [
         },
         'default'     => 'keyword1,keyword2',
     ],
-    'packageVcsUrl'        => [
+    'packageVcsUrl'      => [
         'name'        => 'Package VCS URL',
         'description' => 'The version control system URL of the package.',
         'validation'  => function($placeholder) {
@@ -74,7 +74,7 @@ $placeholders = [
             return 'https://github.com/' . $vendorName . '/' . $packageName;
         },
     ],
-    'packageUrl'           => [
+    'packageUrl'         => [
         'name'        => 'Package URL',
         'description' => 'The website URL of the package.',
         'validation'  => function($placeholder) {
@@ -84,7 +84,7 @@ $placeholders = [
             return $placeholders['packageVcsUrl']['value'];
         },
     ],
-    'authorName'           => [
+    'authorName'         => [
         'name'        => 'Author name',
         'description' => 'The name of the author of the package.',
         'validation'  => function($placeholder) {
@@ -92,7 +92,7 @@ $placeholders = [
         },
         'default'     => 'Felix Arntz',
     ],
-    'authorEmail'          => [
+    'authorEmail'        => [
         'name'        => 'Author email',
         'description' => 'The email address of the author of the package.',
         'validation'  => function($placeholder) {
@@ -100,7 +100,7 @@ $placeholders = [
         },
         'default'     => 'felix-arntz@leaves-and-love.net',
     ],
-    'authorUrl'            => [
+    'authorUrl'          => [
         'name'        => 'Author URL',
         'description' => 'The website URL of the author of the package.',
         'validation'  => function($placeholder) {
@@ -110,21 +110,51 @@ $placeholders = [
     ],
 ];
 
+$generatedPlaceholders = [
+    'vendorNameHyphenCase'          => function($placeholders) {
+        return Util::toHyphenCase($placeholders['vendorName']['value']);
+    },
+    'codeVendorNameHyphenCase'      => function($placeholders) {
+        return Util::toHyphenCase($placeholders['codeVendorName']['value']);
+    },
+    'codeVendorNameUnderscoreCase'  => function($placeholders) {
+        return Util::toUnderscoreCase($placeholders['codeVendorName']['value']);
+    },
+    'codeVendorNamePascalCase'      => function($placeholders) {
+        return Util::toPascalCase($placeholders['codeVendorName']['value']);
+    },
+    'codeVendorNamePascalCase'      => function($placeholders) {
+        return Util::toPascalCase($placeholders['codeVendorName']['value']);
+    },
+    'codeVendorNameConstantCase'    => function($placeholders) {
+        return Util::toConstantCase($placeholders['codeVendorName']['value']);
+    },
+    'packageNameHyphenCase'         => function($placeholders) {
+        return Util::toHyphenCase($placeholders['packageName']['value']);
+    },
+    'codePackageNameHyphenCase'     => function($placeholders) {
+        return Util::toHyphenCase($placeholders['codePackageName']['value']);
+    },
+    'codePackageNameUnderscoreCase' => function($placeholders) {
+        return Util::toUnderscoreCase($placeholders['codePackageName']['value']);
+    },
+    'codePackageNamePascalCase'     => function($placeholders) {
+        return Util::toPascalCase($placeholders['codePackageName']['value']);
+    },
+    'codePackageNamePascalCase'     => function($placeholders) {
+        return Util::toPascalCase($placeholders['codePackageName']['value']);
+    },
+    'codePackageNameConstantCase'   => function($placeholders) {
+        return Util::toConstantCase($placeholders['codePackageName']['value']);
+    },
+];
+
 $settings = [
     'packageType'           => [
         'name'        => 'Package type',
         'description' => 'The type of the package.',
-        'choices'     => ['library', 'plugin', 'theme'],
+        'choices'     => ['library', 'plugin'], // Add 'theme' in here once supported.
         'default'     => 'library',
-    ],
-    'prepareWordPressOrg'   => [
-        'name'        => 'Prepare for wordpress.org?',
-        'description' => 'Whether to prepare the package for release on wordpress.org.',
-        'confirm'     => true,
-        'default'     => true,
-        'skip'        => function($settings) {
-            return !in_array($settings['packageType']['value'], ['plugin', 'theme'], true);
-        },
     ],
     'minimumPHP'            => [
         'name'        => 'Minimum PHP version',
@@ -207,9 +237,25 @@ $settings = [
             return !$settings['setupCodeStandards']['value'];
         },
     ],
+    'preparePackagist'      => [
+        'name'        => 'Prepare for Packagist?',
+        'description' => 'Whether to prepare the package for release on Packagist.',
+        'confirm'     => true,
+        'default'     => true,
+    ],
+    'prepareWordPressOrg'   => [
+        'name'        => 'Prepare for wordpress.org?',
+        'description' => 'Whether to prepare the package for release on wordpress.org.',
+        'confirm'     => true,
+        'default'     => true,
+        'skip'        => function($settings) {
+            return !in_array($settings['packageType']['value'], ['plugin', 'theme'], true);
+        },
+    ],
 ];
 
 return [
-    'placeholders' => $placeholders,
-    'settings'     => $settings,
+    'placeholders'          => $placeholders,
+    'generatedPlaceholders' => $generatedPlaceholders,
+    'settings'              => $settings,
 ];
