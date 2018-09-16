@@ -82,11 +82,11 @@ class Setup
             RequestPlaceholderValuesTask::class,
             RequestSettingValuesTask::class,
             VerifyConfigurationTask::class,
+            RemoveOriginalVersionControlTask::class,
             RemoveOriginalFilesTask::class,
             ReplacePlaceholdersTask::class,
             MoveTemplateFilesTask::class,
             GenerateComposerJsonTask::class,
-            RemoveOriginalVersionControlTask::class,
             InitializeVersionControlTask::class,
             RemoveOriginalDirectoriesTask::class,
         ];
