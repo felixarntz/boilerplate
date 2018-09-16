@@ -291,8 +291,8 @@ $composerGenerator = function($placeholders, $settings) {
 
     // The 'autoload' property.
     if (version_compare($settings['minimumPHP'], '5.3', '>=')) {
-        $namespace = $placeholders['codeVendorNamePascalCase'] . '\\\\'
-            . $placeholders['codePackageNamePascalCase'] . '\\\\';
+        $namespace = $placeholders['codeVendorNamePascalCase'] . '\\'
+            . $placeholders['codePackageNamePascalCase'] . '\\';
 
         $data['autoload'] = [
             'psr-4' => [

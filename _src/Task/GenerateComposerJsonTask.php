@@ -50,9 +50,14 @@ class GenerateComposerJsonTask extends AbstractTask implements ConfigAware
         $settings     = $this->getSettingValues();
 
         $composerData = call_user_func($this->config['composerGenerator'], $placeholders, $settings);
-        $composerFile = Util::getAbsolutePath('composer2.json');
+        $composerData = json_encode($composerData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
-        file_put_contents($composerFile, json_encode($composerData, JSON_PRETTY_PRINT));
+        // Ensure JSON is indented with 2 spaces instead of the default 4.
+        $composerData = preg_replace_callback('/^([ ]+)/m', function(array $matches) {
+            return str_repeat(' ', strlen($matches[1]) / 2);
+        }, $composerData);
+
+        file_put_contents(Util::getAbsolutePath('composer.json'), $composerData);
     }
 
     /**
