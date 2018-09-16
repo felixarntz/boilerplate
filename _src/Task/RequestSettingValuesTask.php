@@ -45,6 +45,7 @@ class RequestSettingValuesTask extends AbstractTask implements ConfigAware, IOAw
 
         foreach ($this->config['settings'] as $key => $data) {
             if ($this->shouldSkipSetting($data)) {
+                $this->config['settings'][$key]['value'] = $this->getSettingDefault($data);
                 continue;
             }
 
