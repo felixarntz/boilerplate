@@ -287,59 +287,76 @@ $composerGenerator = function($placeholders, $settings) {
         'support'     => [
             'issues' => rtrim($placeholders['packageVcsUrl'], '/') . '/issues',
         ],
+        'autoload'    => [],
+        'require'     => [
+            'php' => '>=' . $settings['minimumPHP'],
+        ],
+        'require-dev' => [],
+        'scripts'     => [],
+        'extra'       => [],
     ];
 
-    // The 'autoload' property.
+    // Setup autoloading.
     if (version_compare($settings['minimumPHP'], '5.3', '>=')) {
         $namespace = $placeholders['codeVendorNamePascalCase'] . '\\'
             . $placeholders['codePackageNamePascalCase'] . '\\';
 
-        $data['autoload'] = [
-            'psr-4' => [
-                $namespace => 'src',
-            ],
-        ];
+        $data['autoload']['psr-4'] = [$namespace => 'src'];
+
+        // For WordPress plugins and themes, setup dependency scoping.
+        if (in_array($settings['packageType'], ['plugin', 'theme'], true)) {
+            $data['require-dev']['coenjacobs/mozart'] = '^0.2';
+
+            $mozartCommand = '"vendor/bin/mozart" compose';
+
+            $data['scripts']['post-install-cmd'] = [$mozartCommand];
+            $data['scripts']['post-update-cmd']  = [$mozartCommand];
+
+            $data['extra'] = [
+                'mozart' => [
+                    'dep_namespace' => $namespace . 'Dependencies\\',
+                    'dep_directory' => '/src/Dependencies/',
+                    'packages'      => [],
+                ],
+            ];
+        }
     }
 
-    // The 'require' property.
-    $data['require'] = [
-        'php' => '>=' . $settings['minimumPHP'],
-    ];
+    // Require 'composer/installers' if necessary.
     if (in_array($settings['packageType'], ['plugin', 'theme'], true)) {
         $data['require']['composer/installers'] = '^1';
     }
 
-    // The 'require-dev' property.
-    if ($settings['setupCodeStandards'] || $settings['setupUnitTests']) {
-        $data['require-dev'] = [];
-        if ($settings['setupCodeStandards']) {
-            $data['require-dev']['squizlabs/php_codesniffer']                      = '^3.3';
-            $data['require-dev']['dealerdirect/phpcodesniffer-composer-installer'] = '^0.4';
-            $data['require-dev']['wp-coding-standards/wpcs']                       = '^1';
-        }
-        if ($settings['setupUnitTests']) {
-            if (in_array($settings['packageType'], ['plugin', 'theme'], true)) {
-                if (version_compare($settings['minimumPHP'], '7.0', '>=')) {
-                    $phpunitVersion = '^6';
-                } else {
-                    $phpunitVersion = '>4.8.20 <6.0';
-                }
-                $data['require-dev']['phpunit/phpunit'] = $phpunitVersion;
-                $data['require-dev']['brain/monkey']    = '^2';
+    // Require necessary tools for coding standards setup.
+    if ($settings['setupCodeStandards']) {
+        $data['require-dev']['squizlabs/php_codesniffer']                      = '^3.3';
+        $data['require-dev']['dealerdirect/phpcodesniffer-composer-installer'] = '^0.4';
+        $data['require-dev']['wp-coding-standards/wpcs']                       = '^1';
+    }
+
+    // Require necessary tools for unit tests setup.
+    if ($settings['setupUnitTests']) {
+        if (in_array($settings['packageType'], ['plugin', 'theme'], true)) {
+            if (version_compare($settings['minimumPHP'], '7.0', '>=')) {
+                $phpunitVersion = '^6';
             } else {
-                if (version_compare($settings['minimumPHP'], '7.1', '>=')) {
-                    $phpunitVersion = '^7';
-                } elseif (version_compare($settings['minimumPHP'], '7.0', '>=')) {
-                    $phpunitVersion = '^6';
-                } else {
-                    $phpunitVersion = '>=4 <6';
-                }
-                $data['require-dev']['phpunit/phpunit'] = $phpunitVersion;
+                $phpunitVersion = '>4.8.20 <6.0';
             }
+            $data['require-dev']['phpunit/phpunit'] = $phpunitVersion;
+            $data['require-dev']['brain/monkey']    = '^2';
+        } else {
+            if (version_compare($settings['minimumPHP'], '7.1', '>=')) {
+                $phpunitVersion = '^7';
+            } elseif (version_compare($settings['minimumPHP'], '7.0', '>=')) {
+                $phpunitVersion = '^6';
+            } else {
+                $phpunitVersion = '>=4 <6';
+            }
+            $data['require-dev']['phpunit/phpunit'] = $phpunitVersion;
         }
     }
 
-    return $data;
+    return array_filter($data);
 };
 
 return [
