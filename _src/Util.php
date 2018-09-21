@@ -20,7 +20,7 @@ class Util
 {
 
     /**
-     * Transforms a regular human-readable name to lower hyphen-case.
+     * Transforms a regular human-readable name to hyphen-case.
      *
      * @since 1.0.0
      *
@@ -29,7 +29,33 @@ class Util
      */
     public static function toHyphenCase(string $name) : string
     {
-        return str_replace(' ', '-', strtolower($name));
+        return str_replace(' ', '-', $name);
+    }
+
+    /**
+     * Transforms a regular human-readable name to underscore-case.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name Input name. Is not checked against invalid characters.
+     * @return string Name in underscore-case.
+     */
+    public static function toUnderscoreCase(string $name) : string
+    {
+        return str_replace(' ', '_', $name);
+    }
+
+    /**
+     * Transforms a regular human-readable name to lower hyphen-case.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name Input name. Is not checked against invalid characters.
+     * @return string Name in hyphen-case.
+     */
+    public static function toHyphenLowerCase(string $name) : string
+    {
+        return static::toHyphenCase(strtolower($name));
     }
 
     /**
@@ -40,9 +66,9 @@ class Util
      * @param string $name Input name. Is not checked against invalid characters.
      * @return string Name in underscore-case.
      */
-    public static function toUnderscoreCase(string $name) : string
+    public static function toUnderscoreLowerCase(string $name) : string
     {
-        return str_replace(' ', '_', strtolower($name));
+        return static::toUnderscoreCase(strtolower($name));
     }
 
     /**

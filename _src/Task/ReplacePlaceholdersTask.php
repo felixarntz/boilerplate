@@ -68,9 +68,16 @@ class ReplacePlaceholdersTask extends AbstractTask implements ConfigAware
             }
         }
 
+        $settings = [];
+        if (!empty($this->config['settings'])) {
+            foreach ($this->config['settings'] as $key => $data) {
+                $settings[$key] = $data['value'];
+            }
+        }
+
         if (!empty($this->config['generatedPlaceholders'])) {
             foreach ($this->config['generatedPlaceholders'] as $key => $callback) {
-                $placeholders[$key] = call_user_func($callback, $this->config['placeholders']);
+                $placeholders[$key] = call_user_func($callback, $placeholders, $settings);
             }
         }
 

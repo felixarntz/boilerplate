@@ -111,44 +111,68 @@ $placeholders = [
 ];
 
 $generatedPlaceholders = [
-    'vendorNameHyphenCase'          => function($placeholders) {
-        return Util::toHyphenCase($placeholders['vendorName']['value']);
+    'vendorNameHyphenCase'               => function($placeholders) {
+        return Util::toHyphenCase($placeholders['vendorName']);
     },
-    'codeVendorNameHyphenCase'      => function($placeholders) {
-        return Util::toHyphenCase($placeholders['codeVendorName']['value']);
+    'codeVendorNameHyphenCase'           => function($placeholders) {
+        return Util::toHyphenCase($placeholders['codeVendorName']);
     },
-    'codeVendorNameUnderscoreCase'  => function($placeholders) {
-        return Util::toUnderscoreCase($placeholders['codeVendorName']['value']);
+    'codeVendorNameHyphenLowerCase'      => function($placeholders) {
+        return Util::toHyphenLowerCase($placeholders['codeVendorName']);
     },
-    'codeVendorNamePascalCase'      => function($placeholders) {
-        return Util::toPascalCase($placeholders['codeVendorName']['value']);
+    'codeVendorNameUnderscoreCase'       => function($placeholders) {
+        return Util::toUnderscoreCase($placeholders['codeVendorName']);
     },
-    'codeVendorNameCamelCase'       => function($placeholders) {
-        return Util::toCamelCase($placeholders['codeVendorName']['value']);
+    'codeVendorNameUnderscoreLowerCase'  => function($placeholders) {
+        return Util::toUnderscoreLowerCase($placeholders['codeVendorName']);
     },
-    'codeVendorNameConstantCase'    => function($placeholders) {
-        return Util::toConstantCase($placeholders['codeVendorName']['value']);
+    'codeVendorNamePascalCase'           => function($placeholders) {
+        return Util::toPascalCase($placeholders['codeVendorName']);
     },
-    'packageNameHyphenCase'         => function($placeholders) {
-        return Util::toHyphenCase($placeholders['packageName']['value']);
+    'codeVendorNameCamelCase'            => function($placeholders) {
+        return Util::toCamelCase($placeholders['codeVendorName']);
     },
-    'codePackageNameHyphenCase'     => function($placeholders) {
-        return Util::toHyphenCase($placeholders['codePackageName']['value']);
+    'codeVendorNameConstantCase'         => function($placeholders) {
+        return Util::toConstantCase($placeholders['codeVendorName']);
     },
-    'codePackageNameUnderscoreCase' => function($placeholders) {
-        return Util::toUnderscoreCase($placeholders['codePackageName']['value']);
+    'codeVendorNamespace'                => function($placeholders, $settings) {
+        if ($settings['codeStandard'] === 'wordpress') {
+            return $placeholders['codeVendorNameUnderscoreCase'];
+        }
+        return $placeholders['codeVendorNamePascalCase'];
     },
-    'codePackageNamePascalCase'     => function($placeholders) {
-        return Util::toPascalCase($placeholders['codePackageName']['value']);
+    'packageNameHyphenCase'              => function($placeholders) {
+        return Util::toHyphenCase($placeholders['packageName']);
     },
-    'codePackageNameCamelCase'      => function($placeholders) {
-        return Util::toCamelCase($placeholders['codePackageName']['value']);
+    'codePackageNameHyphenCase'          => function($placeholders) {
+        return Util::toHyphenCase($placeholders['codePackageName']);
     },
-    'codePackageNameConstantCase'   => function($placeholders) {
-        return Util::toConstantCase($placeholders['codePackageName']['value']);
+    'codePackageNameHyphenLowerCase'     => function($placeholders) {
+        return Util::toHyphenLowerCase($placeholders['codePackageName']);
     },
-    'packageKeywordsList'           => function($placeholders) {
-        return str_replace(',', ', ', $placeholders['packageKeywords']['value']);
+    'codePackageNameUnderscoreCase'      => function($placeholders) {
+        return Util::toUnderscoreCase($placeholders['codePackageName']);
+    },
+    'codePackageNameUnderscoreLowerCase' => function($placeholders) {
+        return Util::toUnderscoreLowerCase($placeholders['codePackageName']);
+    },
+    'codePackageNamePascalCase'          => function($placeholders) {
+        return Util::toPascalCase($placeholders['codePackageName']);
+    },
+    'codePackageNameCamelCase'           => function($placeholders) {
+        return Util::toCamelCase($placeholders['codePackageName']);
+    },
+    'codePackageNameConstantCase'        => function($placeholders) {
+        return Util::toConstantCase($placeholders['codePackageName']);
+    },
+    'codePackageNamespace'               => function($placeholders, $settings) {
+        if ($settings['codeStandard'] === 'wordpress') {
+            return $placeholders['codePackageNameUnderscoreCase'];
+        }
+        return $placeholders['codePackageNamePascalCase'];
+    },
+    'packageKeywordsList'                => function($placeholders) {
+        return str_replace(',', ', ', $placeholders['packageKeywords']);
     },
 ];
 
@@ -174,20 +198,17 @@ $settings = [
             return !in_array($settings['packageType']['value'], ['plugin', 'theme'], true);
         },
     ],
-    'setupCodeStandards'    => [
-        'name'        => 'Setup code standards?',
-        'description' => 'Whether to setup code standards for the package with PHPCodeSniffer.',
-        'confirm'     => true,
-        'default'     => true,
-    ],
     'codeStandard'          => [
         'name'        => 'Code standard',
         'description' => 'The code standard of the package.',
         'choices'     => ['psr2', 'wordpress'],
         'default'     => 'psr2',
-        'skip'        => function($settings) {
-            return ! $settings['setupCodeStandards']['value'];
-        },
+    ],
+    'setupCodeStandards'    => [
+        'name'        => 'Setup code standards?',
+        'description' => 'Whether to setup code standards for the package with PHPCodeSniffer.',
+        'confirm'     => true,
+        'default'     => true,
     ],
     'setupQualityAssurance' => [
         'name'        => 'Setup quality assurance?',
@@ -270,7 +291,7 @@ $composerGenerator = function($placeholders, $settings) {
     }
 
     $data = [
-        'name'        => $placeholders['vendorNameHyphenCase'] . '/' . $placeholders['packageNameHyphenCase'],
+        'name'        => $placeholders['vendorNameHyphenLowerCase'] . '/' . $placeholders['packageNameHyphenLowerCase'],
         'description' => $placeholders['packageDescription'],
         'version'     => '1.0.0',
         'license'     => 'GPL-2.0-or-later',
@@ -298,8 +319,8 @@ $composerGenerator = function($placeholders, $settings) {
 
     // Setup autoloading.
     if (version_compare($settings['minimumPHP'], '5.3', '>=')) {
-        $namespace = $placeholders['codeVendorNamePascalCase'] . '\\'
-            . $placeholders['codePackageNamePascalCase'] . '\\';
+        $namespace = $placeholders['codeVendorNamespace'] . '\\'
+            . $placeholders['codePackageNamespace'] . '\\';
 
         $data['autoload']['psr-4'] = [$namespace => 'src'];
 
