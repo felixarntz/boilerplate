@@ -1,0 +1,23 @@
+{{#integrateTravisCI}}
+[![Build Status](https://api.travis-ci.org/{{vendorNameHyphenLowerCase}}/{{packageNameHyphenLowerCase}}.png?branch=master)](https://travis-ci.org/{{vendorNameHyphenLowerCase}}/{{packageNameHyphenLowerCase}})
+{{/integrateTravisCI}}
+{{#integrateCodeClimate}}
+[![Code Climate](https://codeclimate.com/github/{{vendorNameHyphenLowerCase}}/{{packageNameHyphenLowerCase}}/badges/gpa.svg)](https://codeclimate.com/github/{{vendorNameHyphenLowerCase}}/{{packageNameHyphenLowerCase}})
+[![Test Coverage](https://codeclimate.com/github/{{vendorNameHyphenLowerCase}}/{{packageNameHyphenLowerCase}}/badges/coverage.svg)](https://codeclimate.com/github/{{vendorNameHyphenLowerCase}}/{{packageNameHyphenLowerCase}}/coverage)
+{{/integrateCodeClimate}}
+{{#preparePackagist}}
+[![Latest Stable Version](https://poser.pugx.org/{{vendorNameHyphenLowerCase}}/{{packageNameHyphenLowerCase}}/version)](https://packagist.org/packages/{{vendorNameHyphenLowerCase}}/{{packageNameHyphenLowerCase}})
+[![License](https://poser.pugx.org/{{vendorNameHyphenLowerCase}}/{{packageNameHyphenLowerCase}}/license)](https://packagist.org/packages/{{vendorNameHyphenLowerCase}}/{{packageNameHyphenLowerCase}})
+{{/preparePackagist}}
+
+# {{packageName}}
+
+{{packageDescription}}
+
+## Requirements
+
+* PHP >= {{minimumPHP}}
+
+## Contributing
+
+Any kind of contributions to {{packageName}} are welcome. Please [read the contributing guidelines]({{packageVcsUrl}}/blob/master/CONTRIBUTING.md) to get started.

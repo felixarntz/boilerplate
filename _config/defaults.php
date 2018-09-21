@@ -397,20 +397,21 @@ $templatePicker = function($settings) {
 
     $templates['.editorconfig-' . $settings['codeStandard']] = '.editorconfig';
 
+    $templates['LICENSE.md']                                 = 'LICENSE.md';
+    $templates['README-' . $settings['packageType'] . '.md'] = 'README.md';
+
     $templates['CONTRIBUTING-' . $settings['packageType'] . '.md']                  = 'CONTRIBUTING.md';
     $templates['.github/ISSUE_TEMPLATE-' . $settings['packageType'] . '.md']        = '.github/ISSUE_TEMPLATE.md';
     $templates['.github/PULL_REQUEST_TEMPLATE-' . $settings['packageType'] . '.md'] = '.github/PULL_REQUEST_TEMPLATE.md';
 
-    switch ($settings['packageType']) {
-        case 'plugin':
-            $templates['license.txt'] = 'license.txt';
-            $templates['readme.txt']  = 'readme.txt';
-            $templates['deploy.sh']   = 'deploy.sh';
-            break;
-        case 'theme':
-            $templates['license.txt'] = 'license.txt';
-            break;
-        default:
+    if (in_array($settings['packageType'], ['plugin', 'theme'], true) && $settings['prepareWordPressOrg']) {
+        $templates['license.txt']                                 = 'license.txt';
+        $templates['readme-' . $settings['packageType'] . '.txt'] = 'readme.txt';
+        $templates['deploy-' . $settings['packageType'] . '.sh']  = 'deploy.sh';
+    }
+
+    if ($settings['setupCodeStandards']) {
+        $templates['phpcs-' . $settings['packageType'] . '-' . $settings['codeStandard'] . '.xml.dist'] = 'phpcs.xml.dist';
     }
 
     return $templates;

@@ -31,8 +31,6 @@
 		<exclude name="WordPress.Security"/>
 		<exclude name="WordPress.WhiteSpace"/>
 		<exclude name="WordPress.WP"/>
-		<exclude name="WordPress.WP"/>
-		<exclude name="WordPress.WP"/>
 	</rule>
 	<rule ref="WordPress-Docs"/>
 </ruleset>
