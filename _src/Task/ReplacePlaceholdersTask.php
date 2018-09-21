@@ -81,6 +81,6 @@ class ReplacePlaceholdersTask extends AbstractTask implements ConfigAware
             }
         }
 
-        return $placeholders;
+        return array_merge($placeholders, $settings);
     }
 }

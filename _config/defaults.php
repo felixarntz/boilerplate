@@ -69,8 +69,8 @@ $placeholders = [
             return Validation::validateURL($placeholder);
         },
         'default'     => function($placeholders) {
-            $vendorName  = Util::toHyphenCase($placeholders['vendorName']['value']);
-            $packageName = Util::toHyphenCase($placeholders['packageName']['value']);
+            $vendorName  = Util::toHyphenLowerCase($placeholders['vendorName']['value']);
+            $packageName = Util::toHyphenLowerCase($placeholders['packageName']['value']);
             return 'https://github.com/' . $vendorName . '/' . $packageName;
         },
     ],
@@ -111,8 +111,8 @@ $placeholders = [
 ];
 
 $generatedPlaceholders = [
-    'vendorNameHyphenCase'               => function($placeholders) {
-        return Util::toHyphenCase($placeholders['vendorName']);
+    'vendorNameHyphenLowerCase'          => function($placeholders) {
+        return Util::toHyphenLowerCase($placeholders['vendorName']);
     },
     'codeVendorNameHyphenCase'           => function($placeholders) {
         return Util::toHyphenCase($placeholders['codeVendorName']);
@@ -141,8 +141,8 @@ $generatedPlaceholders = [
         }
         return $placeholders['codeVendorNamePascalCase'];
     },
-    'packageNameHyphenCase'              => function($placeholders) {
-        return Util::toHyphenCase($placeholders['packageName']);
+    'packageNameHyphenLowerCase'         => function($placeholders) {
+        return Util::toHyphenLowerCase($placeholders['packageName']);
     },
     'codePackageNameHyphenCase'          => function($placeholders) {
         return Util::toHyphenCase($placeholders['codePackageName']);
@@ -173,6 +173,18 @@ $generatedPlaceholders = [
     },
     'packageKeywordsList'                => function($placeholders) {
         return str_replace(',', ', ', $placeholders['packageKeywords']);
+    },
+    'codeStandardName'                   => function($placeholders, $settings) {
+        if ($settings['codeStandard'] === 'wordpress') {
+            return 'WordPress';
+        }
+        return 'PSR-2';
+    },
+    'codeStandardUrl'                    => function($placeholders, $settings) {
+        if ($settings['codeStandard'] === 'wordpress') {
+            return 'https://make.wordpress.org/core/handbook/best-practices/coding-standards/';
+        }
+        return 'https://www.php-fig.org/psr/psr-2/';
     },
 ];
 
@@ -378,6 +390,30 @@ $composerGenerator = function($placeholders, $settings) {
     }
 
     return array_filter($data);
+};
+
+$templatePicker = function($settings) {
+    $templates = ['.gitignore' => '.gitignore'];
+
+    $templates['.editorconfig-' . $settings['codeStandard']] = '.editorconfig';
+
+    $templates['CONTRIBUTING-' . $settings['packageType'] . '.md']                  = 'CONTRIBUTING.md';
+    $templates['.github/ISSUE_TEMPLATE-' . $settings['packageType'] . '.md']        = '.github/ISSUE_TEMPLATE.md';
+    $templates['.github/PULL_REQUEST_TEMPLATE-' . $settings['packageType'] . '.md'] = '.github/PULL_REQUEST_TEMPLATE.md';
+
+    switch ($settings['packageType']) {
+        case 'plugin':
+            $templates['license.txt'] = 'license.txt';
+            $templates['readme.txt']  = 'readme.txt';
+            $templates['deploy.sh']   = 'deploy.sh';
+            break;
+        case 'theme':
+            $templates['license.txt'] = 'license.txt';
+            break;
+        default:
+    }
+
+    return $templates;
 };
 
 return [
