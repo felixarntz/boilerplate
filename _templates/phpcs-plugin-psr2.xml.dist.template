@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="PSR-2 Plugin">
-    <description>Ruleset for a PSR-2 plugin.</description>
+<ruleset name="PSR-2 WordPress Plugin">
+    <description>Ruleset for a PSR-2 WordPress plugin.</description>
 
     <file>./{{packageNameHyphenLowerCase}}.php</file>
     <file>./src</file>
@@ -29,4 +29,17 @@
         <exclude name="WordPress.WhiteSpace"/>
     </rule>
     <rule ref="WordPress-Docs"/>
+
+    <!-- Selected WordPress Coding Standards tweaks -->
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="string" value="{{packageNameHyphenLowerCase}}"/>
+        </properties>
+    </rule>
+
+    <rule ref="WordPress.Files.FileName">
+        <properties>
+            <property name="strict_class_file_names" value="false" />
+        </properties>
+    </rule>
 </ruleset>

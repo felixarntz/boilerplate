@@ -1,0 +1,25 @@
+<!--
+BEFORE OPENING YOUR PULL REQUEST:
+- Make sure your code is backward-compatible with PHP {{minimumPHP}}.
+- Make sure your code follows the {{codeStandardName}} coding standards.
+- Make sure your code is properly documented.
+-->
+
+## Summary
+
+<!-- Please provide one sentence summarizing the PR, to be used in the changelog. -->
+This PR can be summarized in the following changelog entry:
+
+*
+
+<!-- Please reference the issue this PR addresses. -->
+Adresses issue #
+
+## Relevant technical choices
+<!-- Please describe your changes. -->
+
+## Checklist:
+- [ ] My code is tested.
+- [ ] My code is backward-compatible with PHP {{minimumPHP}}.
+- [ ] My code follows the [{{codeStandardName}}]({{codeStandardUrl}}) coding standards.
+- [ ] My code has proper inline documentation.

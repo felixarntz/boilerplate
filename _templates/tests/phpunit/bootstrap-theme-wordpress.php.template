@@ -1,0 +1,21 @@
+<?php
+/**
+ * Unit tests bootstrap script.
+ *
+ * @package {{codeVendorNamespace}}\{{codePackageNamespace}}
+ * @license GNU General Public License, version 2
+ * @link    {{packageUrl}}
+ */
+
+// Detect project directory.
+define( 'TESTS_THEME_DIR', dirname( dirname( __DIR__ ) ) );
+
+// Disable xdebug backtrace.
+if ( function_exists( 'xdebug_disable' ) ) {
+	xdebug_disable();
+}
+
+require_once TESTS_THEME_DIR . '/vendor/autoload.php';
+
+// PHPUnit < 6.0 compatibility shim.
+require_once __DIR__ . '/phpunit-compat.php';

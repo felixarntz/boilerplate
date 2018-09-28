@@ -1,0 +1,27 @@
+<?php
+/**
+ * Class {{codeVendorNamespace}}\{{codePackageNamespace}}\Tests\PHPUnit\Integration\SampleTests
+ *
+ * @package {{codeVendorNamespace}}\{{codePackageNamespace}}
+ * @license GNU General Public License, version 2
+ * @link    {{packageUrl}}
+ */
+
+namespace {{codeVendorNamespace}}\{{codePackageNamespace}}\Tests\PHPUnit\Integration;
+
+use {{codeVendorNamespace}}\{{codePackageNamespace}}\Tests\PHPUnit\Framework\IntegrationTestCase;
+
+/**
+ * Class containing a sample test.
+ */
+class SampleTests extends IntegrationTestCase
+{
+
+    /**
+     * Performs a sample test.
+     */
+    public function testNothingUseful()
+    {
+        $this->assertTrue(defined('ABSPATH'));
+    }
+}

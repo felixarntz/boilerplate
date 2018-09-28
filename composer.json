@@ -34,11 +34,14 @@
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.3",
     "dealerdirect/phpcodesniffer-composer-installer": "^0.4",
-    "wp-coding-standards/wpcs": "^1"
+    "wp-coding-standards/wpcs": "^1",
+    "phpmd/phpmd": "^2.6"
   },
   "scripts":     {
     "post-create-project-cmd": [
       "FelixArntz\\Boilerplate\\Setup::run"
-    ]
+    ],
+    "phpcs": "@php ./_vendor/bin/phpcs",
+    "phpmd": "@php ./_vendor/bin/phpmd _src text phpmd.xml.dist"
   }
 }

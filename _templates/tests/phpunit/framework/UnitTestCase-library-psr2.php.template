@@ -1,0 +1,20 @@
+<?php
+/**
+ * Class {{codeVendorNamespace}}\{{codePackageNamespace}}\Tests\PHPUnit\Framework\UnitTestCase
+ *
+ * @package {{codeVendorNamespace}}\{{codePackageNamespace}}
+ * @license GNU General Public License, version 2
+ * @link    {{packageUrl}}
+ */
+
+namespace {{codeVendorNamespace}}\{{codePackageNamespace}}\Tests\PHPUnit\Framework;
+
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Class representing a unit test case.
+ */
+class UnitTestCase extends TestCase
+{
+
+}

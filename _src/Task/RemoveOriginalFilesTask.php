@@ -59,7 +59,8 @@ class RemoveOriginalFilesTask extends AbstractTask
             '.gitignore',
             'composer.json',
             'composer.lock',
-            'phpcs.xml',
+            'phpcs.xml.dist',
+            'phpmd.xml.dist',
             'LICENSE.md',
             'README.md',
         ];

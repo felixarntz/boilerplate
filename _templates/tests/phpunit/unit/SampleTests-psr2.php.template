@@ -1,0 +1,27 @@
+<?php
+/**
+ * Class {{codeVendorNamespace}}\{{codePackageNamespace}}\Tests\PHPUnit\Unit\SampleTests
+ *
+ * @package {{codeVendorNamespace}}\{{codePackageNamespace}}
+ * @license GNU General Public License, version 2
+ * @link    {{packageUrl}}
+ */
+
+namespace {{codeVendorNamespace}}\{{codePackageNamespace}}\Tests\PHPUnit\Unit;
+
+use {{codeVendorNamespace}}\{{codePackageNamespace}}\Tests\PHPUnit\Framework\UnitTestCase;
+
+/**
+ * Class containing a sample test.
+ */
+class SampleTests extends UnitTestCase
+{
+
+    /**
+     * Performs a sample test.
+     */
+    public function testNothingUseful()
+    {
+        $this->assertTrue(true);
+    }
+}

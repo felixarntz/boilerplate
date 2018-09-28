@@ -1,0 +1,19 @@
+<?php
+/**
+ * Class {{codeVendorNamespace}}\{{codePackageNamespace}}\Tests\PHPUnit\Framework\Integration_Test_Case
+ *
+ * @package {{codeVendorNamespace}}\{{codePackageNamespace}}
+ * @license GNU General Public License, version 2
+ * @link    {{packageUrl}}
+ */
+
+namespace {{codeVendorNamespace}}\{{codePackageNamespace}}\Tests\PHPUnit\Framework;
+
+use WP_UnitTestCase;
+
+/**
+ * Class representing an integration test case.
+ */
+class Integration_Test_Case extends WP_UnitTestCase {
+
+}

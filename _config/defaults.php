@@ -186,6 +186,9 @@ $generatedPlaceholders = [
         }
         return 'https://www.php-fig.org/psr/psr-2/';
     },
+    'wordPressContributorsList'          => function($placeholders, $settings) {
+        return str_replace(',', ', ', $settings['wordPressContributors']);
+    },
 ];
 
 $settings = [
@@ -288,6 +291,20 @@ $settings = [
             return !in_array($settings['packageType']['value'], ['plugin', 'theme'], true);
         },
     ],
+    'wordPressContributors' => [
+        'name'        => 'WordPress.org contributors',
+        'description' => 'WordPress.org usernames of the contributors to this package, separated by comma.',
+        'validation'  => function($placeholder) {
+            return Validation::validateSlugList($placeholder);
+        },
+        'default'     => 'flixos90',
+        'skip'        => function($settings) {
+            if (!$settings['prepareWordPressOrg']['value']) {
+                return true;
+            }
+            return !in_array($settings['packageType']['value'], ['plugin', 'theme'], true);
+        },
+    ],
 ];
 
 $composerGenerator = function($placeholders, $settings) {
@@ -303,30 +320,31 @@ $composerGenerator = function($placeholders, $settings) {
     }
 
     $data = [
-        'name'        => $placeholders['vendorNameHyphenLowerCase'] . '/' . $placeholders['packageNameHyphenLowerCase'],
-        'description' => $placeholders['packageDescription'],
-        'version'     => '1.0.0',
-        'license'     => 'GPL-2.0-or-later',
-        'type'        => $type,
-        'keywords'    => explode(',', $placeholders['packageKeywords']),
-        'homepage'    => $placeholders['packageUrl'],
-        'authors'     => [
+        'name'         => $placeholders['vendorNameHyphenLowerCase'] . '/' . $placeholders['packageNameHyphenLowerCase'],
+        'description'  => $placeholders['packageDescription'],
+        'version'      => '1.0.0',
+        'license'      => 'GPL-2.0-or-later',
+        'type'         => $type,
+        'keywords'     => explode(',', $placeholders['packageKeywords']),
+        'homepage'     => $placeholders['packageUrl'],
+        'authors'      => [
             [
                 'name'     => $placeholders['authorName'],
                 'email'    => $placeholders['authorEmail'],
                 'homepage' => $placeholders['authorUrl'],
             ],
         ],
-        'support'     => [
+        'support'      => [
             'issues' => rtrim($placeholders['packageVcsUrl'], '/') . '/issues',
         ],
-        'autoload'    => [],
-        'require'     => [
+        'autoload'     => [],
+        'autoload-dev' => [],
+        'require'      => [
             'php' => '>=' . $settings['minimumPHP'],
         ],
-        'require-dev' => [],
-        'scripts'     => [],
-        'extra'       => [],
+        'require-dev'  => [],
+        'scripts'      => [],
+        'extra'        => [],
     ];
 
     // Setup autoloading.
@@ -337,7 +355,7 @@ $composerGenerator = function($placeholders, $settings) {
         $data['autoload']['psr-4'] = [$namespace => 'src'];
 
         // For WordPress plugins and themes, setup dependency scoping.
-        if (in_array($settings['packageType'], ['plugin', 'theme'], true)) {
+        if (in_array($settings['packageType'], ['plugin', 'theme'], true) && $settings['prepareWordPressOrg']) {
             $data['require-dev']['coenjacobs/mozart'] = '^0.2';
 
             $mozartCommand = '"vendor/bin/mozart" compose';
@@ -348,7 +366,7 @@ $composerGenerator = function($placeholders, $settings) {
             $data['extra'] = [
                 'mozart' => [
                     'dep_namespace' => $namespace . 'Dependencies\\',
-                    'dep_directory' => '/src/Dependencies/',
+                    'dep_directory' => '/dependencies/',
                     'packages'      => [],
                 ],
             ];
@@ -365,6 +383,15 @@ $composerGenerator = function($placeholders, $settings) {
         $data['require-dev']['squizlabs/php_codesniffer']                      = '^3.3';
         $data['require-dev']['dealerdirect/phpcodesniffer-composer-installer'] = '^0.4';
         $data['require-dev']['wp-coding-standards/wpcs']                       = '^1';
+
+        $data['scripts']['phpcs'] = '@php ./vendor/bin/phpcs';
+    }
+
+    // Require necessary tools for quality assurance setup.
+    if ($settings['setupQualityAssurance']) {
+        $data['require-dev']['phpmd/phpmd'] = '^2.6';
+
+        $data['scripts']['phpmd'] = '@php ./vendor/bin/phpmd src text phpmd.xml.dist';
     }
 
     // Require necessary tools for unit tests setup.
@@ -386,6 +413,20 @@ $composerGenerator = function($placeholders, $settings) {
                 $phpunitVersion = '>=4 <6';
             }
             $data['require-dev']['phpunit/phpunit'] = $phpunitVersion;
+        }
+
+        // Setup tests autoloading.
+        if (version_compare($settings['minimumPHP'], '5.3', '>=')) {
+            $namespace = $placeholders['codeVendorNamespace'] . '\\'
+            . $placeholders['codePackageNamespace'] . '\\Tests\\PHPUnit\\Framework\\';
+
+            $data['autoload-dev']['psr-4'] = [$namespace => 'tests/phpunit/framework'];
+        }
+
+        $data['scripts']['phpunit'] = '@php ./vendor/bin/phpunit';
+
+        if (in_array($settings['packageType'], ['plugin', 'theme'], true) && $settings['setupIntegrationTests']) {
+            $data['scripts']['phpunit'] = '@php ./vendor/bin/phpunit -c phpunit-integration.xml.dist';
         }
     }
 
@@ -412,6 +453,45 @@ $templatePicker = function($settings) {
 
     if ($settings['setupCodeStandards']) {
         $templates['phpcs-' . $settings['packageType'] . '-' . $settings['codeStandard'] . '.xml.dist'] = 'phpcs.xml.dist';
+    }
+
+    if ($settings['setupQualityAssurance']) {
+        $templates['phpmd.xml.dist'] = 'phpmd.xml.dist';
+    }
+
+    if ($settings['setupUnitTests']) {
+        $templates['phpunit.xml.dist'] = 'phpunit.xml.dist';
+
+        // Setting up unit tests is currently not compatible with PHP 5.2.
+        if (version_compare($settings['minimumPHP'], '5.3', '>=')) {
+            $templates['tests/phpunit/phpunit-compat-' . $settings['codeStandard'] . '.php']                             = 'tests/phpunit/phpunit-compat.php';
+            $templates['tests/phpunit/bootstrap-' . $settings['packageType'] . '-' . $settings['codeStandard'] . '.php'] = 'tests/phpunit/bootstrap.php';
+
+            if ($settings['codeStandard'] === 'wordpress') {
+                $templates['tests/phpunit/framework/UnitTestCase-' . $settings['packageType'] . '-wordpress.php'] = 'tests/phpunit/framework/Unit_Test_Case.php';
+                $templates['tests/phpunit/unit/SampleTests-wordpress.php']                                        = 'tests/phpunit/unit/Sample_Tests.php';
+            } else {
+                $templates['tests/phpunit/framework/UnitTestCase-' . $settings['packageType'] . '-psr2.php'] = 'tests/phpunit/framework/UnitTestCase.php';
+                $templates['tests/phpunit/unit/SampleTests-psr2.php']                                        = 'tests/phpunit/unit/SampleTests.php';
+            }
+        }
+
+        if (in_array($settings['packageType'], ['plugin', 'theme'], true) && $settings['setupIntegrationTests']) {
+            $templates['phpunit-integration.xml.dist'] = 'phpunit-integration.xml.dist';
+
+            // Setting up integration tests is currently not compatible with PHP 5.2.
+            if (version_compare($settings['minimumPHP'], '5.3', '>=')) {
+                $templates['tests/phpunit/bootstrap-integration-' . $settings['packageType'] . '-' . $settings['codeStandard'] . '.php'] = 'tests/phpunit/bootstrap-integration.php';
+
+                if ($settings['codeStandard'] === 'wordpress') {
+                    $templates['tests/phpunit/framework/IntegrationTestCase-' . $settings['packageType'] . '-wordpress.php'] = 'tests/phpunit/framework/Integration_Test_Case.php';
+                    $templates['tests/phpunit/integration/SampleTests-wordpress.php']                                        = 'tests/phpunit/integration/Sample_Tests.php';
+                } else {
+                    $templates['tests/phpunit/framework/IntegrationTestCase-' . $settings['packageType'] . '-psr2.php'] = 'tests/phpunit/framework/IntegrationTestCase.php';
+                    $templates['tests/phpunit/integration/SampleTests-psr2.php']                                        = 'tests/phpunit/integration/SampleTests.php';
+                }
+            }
+        }
     }
 
     return $templates;

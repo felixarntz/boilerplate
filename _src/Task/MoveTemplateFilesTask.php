@@ -39,6 +39,5 @@ class MoveTemplateFilesTask extends AbstractTask implements ConfigAware
      */
     public function complete()
     {
-
     }
 }

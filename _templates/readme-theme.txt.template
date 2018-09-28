@@ -1,0 +1,46 @@
+=== {{packageName}} ===
+
+Contributors:      {{wordPressContributorsList}}
+Requires at least: {{minimumWordPress}}
+Tested up to:      5.0
+Requires PHP:      {{minimumPHP}}
+Stable tag:        1.0.0
+Version:           1.0.0
+License:           GNU General Public License v2 (or later)
+License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+Tags:              {{packageKeywordsList}}
+
+== Description ==
+
+{{packageDescription}}
+
+TODO.
+
+== Installation ==
+
+1. Upload the entire `{{packageNameHyphenLowerCase}}` folder to the `/wp-content/themes/` directory or download it through the WordPress backend.
+2. Activate the theme through the 'Appearance' menu in WordPress.
+
+== Frequently Asked Questions ==
+
+TODO.
+
+= Where should I submit my support request? =
+
+For regular support requests, please use the [wordpress.org support forums](https://wordpress.org/support/theme/{{packageNameHyphenLowerCase}}). If you have a technical issue with the theme where you already have more insight on how to fix it, you can also [open an issue on Github instead]({{packageVcsUrl}}/issues).
+
+= How can I contribute to the theme? =
+
+If you have some ideas to improve the theme or to solve a bug, feel free to raise an issue or submit a pull request in the [Github repository for the theme]({{packageVcsUrl}}). Please stick to the [contributing guidelines]({{packageVcsUrl}}/blob/master/CONTRIBUTING.md).
+
+You can also contribute to the theme by translating it. Simply visit [translate.wordpress.org](https://translate.wordpress.org/projects/wp-themes/{{packageNameHyphenLowerCase}}) to get started.
+
+== Copyright ==
+
+{{packageName}} WordPress Theme, Copyright 2018 {{authorName}}. {{packageName}} is distributed under the terms of the GNU GPL.
+
+== Changelog ==
+
+= 1.0.0 =
+
+* Initial release
