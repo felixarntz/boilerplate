@@ -12,7 +12,7 @@ namespace FelixArntz\Boilerplate\Task;
 use Composer\IO\IOInterface as IO;
 
 /**
- * Interface for something that is aware of a input/output helper.
+ * Interface for something that is aware of an input/output helper.
  *
  * @since 1.0.0
  */

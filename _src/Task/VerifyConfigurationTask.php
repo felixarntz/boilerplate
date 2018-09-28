@@ -55,14 +55,8 @@ class VerifyConfigurationTask extends AbstractTask implements ConfigAware, IOAwa
 
         if (!empty($this->config['settings'])) {
             foreach ($this->config['settings'] as $data) {
-                if (isset($data['skip'])) {
-                    if (is_callable($data['skip'])) {
-                        if (call_user_func($data['skip'], $this->config['settings'])) {
-                            continue;
-                        }
-                    } elseif ($data['skip']) {
-                        continue;
-                    }
+                if ($this->shouldSkipSetting($data)) {
+                    continue;
                 }
 
                 $value = $data['value'];
@@ -84,5 +78,26 @@ class VerifyConfigurationTask extends AbstractTask implements ConfigAware, IOAwa
         if (!$value) {
             throw new RuntimeException('Project configuration not confirmed.');
         }
+    }
+
+    /**
+     * Checks whether verifying the setting value for the given data should be skipped.
+     *
+     * @since 1.0.0
+     *
+     * @param array $data Data for the setting.
+     * @return bool True if the setting should be skipped, false otherwise.
+     */
+    protected function shouldSkipSetting(array $data) : bool
+    {
+        if (!isset($data['skip'])) {
+            return false;
+        }
+
+        if (is_callable($data['skip'])) {
+            return (bool) call_user_func($data['skip'], $this->config['settings']);
+        }
+
+        return (bool) $data['skip'];
     }
 }

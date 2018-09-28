@@ -18,7 +18,7 @@ use Exception;
  */
 class RequestPlaceholderValuesTask extends AbstractTask implements ConfigAware, IOAware
 {
-    use ConfigAwareTrait, IOAwareTrait;
+    use ConfigAwareTrait, RequestValueTrait;
 
     /**
      * Gets the initial status message to show before the task starts execution.
@@ -45,26 +45,8 @@ class RequestPlaceholderValuesTask extends AbstractTask implements ConfigAware, 
 
         foreach ($this->config['placeholders'] as $key => $data) {
             $default = $this->getPlaceholderDefault($data);
-            $value   = $default;
 
-            $question = $this->getPlaceholderQuestion($data, $default);
-
-            if (!empty($data['validation'])) {
-                $proceed = false;
-
-                do {
-                    try {
-                        $value   = $this->io->askAndValidate($question, $data['validation'], null, $default);
-                        $proceed = true;
-                    } catch (Exception $e) {
-                        $this->io->writeError(sprintf('<warning>%s</warning>', $e->getMessage()));
-                    }
-                } while (!$proceed);
-            } else {
-                $value = $this->io->ask($question, $default);
-            }
-
-            $this->config['placeholders'][$key]['value'] = $value;
+            $this->config['placeholders'][$key]['value'] = $this->requestValue($data, $default);
         }
     }
 
@@ -87,31 +69,5 @@ class RequestPlaceholderValuesTask extends AbstractTask implements ConfigAware, 
         }
 
         return $data['default'];
-    }
-
-    /**
-     * Gets the question to print to the user, including optional information.
-     *
-     * @since 1.0.0
-     *
-     * @param array $data    Data for the placeholder.
-     * @param mixed $default Optional. Default value for the placeholder. Default null.
-     * @return string Placeholder question to ask.
-     */
-    protected function getPlaceholderQuestion(array $data, $default = null) : string
-    {
-        $question = sprintf('<question>%s</question>', $data['name']);
-        if (!empty($data['description'])) {
-            $question .= ' [' . $data['description'] . ']';
-        }
-        if ($default !== null) {
-            if (empty($data['choices']) && !empty($data['confirm'])) {
-                $default = $default ? 'yes' : 'no';
-            }
-            $question .= sprintf(' <info>Default: "%s"</info>', $default);
-        }
-        $question .= ' ? ';
-
-        return $question;
     }
 }

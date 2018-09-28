@@ -18,7 +18,7 @@ use Exception;
  */
 class RequestSettingValuesTask extends AbstractTask implements ConfigAware, IOAware
 {
-    use ConfigAwareTrait, IOAwareTrait;
+    use ConfigAwareTrait, RequestValueTrait;
 
     /**
      * Gets the initial status message to show before the task starts execution.
@@ -44,36 +44,14 @@ class RequestSettingValuesTask extends AbstractTask implements ConfigAware, IOAw
         }
 
         foreach ($this->config['settings'] as $key => $data) {
+            $default = $this->getSettingDefault($data);
+
             if ($this->shouldSkipSetting($data)) {
-                $this->config['settings'][$key]['value'] = $this->getSettingDefault($data);
+                $this->config['settings'][$key]['value'] = $default;
                 continue;
             }
 
-            $default = $this->getSettingDefault($data);
-            $value   = $default;
-
-            $question = $this->getSettingQuestion($data, $default);
-
-            if (!empty($data['choices'])) {
-                $proceed = false;
-                $default = array_search($default, $data['choices'], true);
-
-                do {
-                    try {
-                        $value   = $this->io->select($question, $data['choices'], $default);
-                        $value   = $data['choices'][$value];
-                        $proceed = true;
-                    } catch (Exception $e) {
-                        $this->io->writeError(sprintf('<warning>%s</warning>', $e->getMessage()));
-                    }
-                } while (!$proceed);
-            } elseif (!empty($data['confirm'])) {
-                $value = $this->io->askConfirmation($question, $default);
-            } else {
-                $value = $this->io->ask($question, $default);
-            }
-
-            $this->config['settings'][$key]['value'] = $value;
+            $this->config['settings'][$key]['value'] = $this->requestValue($data, $default);
         }
     }
 
@@ -117,31 +95,5 @@ class RequestSettingValuesTask extends AbstractTask implements ConfigAware, IOAw
         }
 
         return $data['default'];
-    }
-
-    /**
-     * Gets the question to print to the user, including optional information.
-     *
-     * @since 1.0.0
-     *
-     * @param array $data    Data for the setting.
-     * @param mixed $default Optional. Default value for the setting. Default null.
-     * @return string Setting question to ask.
-     */
-    protected function getSettingQuestion(array $data, $default = null) : string
-    {
-        $question = sprintf('<question>%s</question>', $data['name']);
-        if (!empty($data['description'])) {
-            $question .= ' [' . $data['description'] . ']';
-        }
-        if ($default !== null) {
-            if (empty($data['choices']) && !empty($data['confirm'])) {
-                $default = $default ? 'yes' : 'no';
-            }
-            $question .= sprintf(' <info>Default: "%s"</info>', $default);
-        }
-        $question .= ' ? ';
-
-        return $question;
     }
 }
