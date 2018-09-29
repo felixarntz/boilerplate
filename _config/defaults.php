@@ -186,6 +186,32 @@ $generatedPlaceholders = [
         }
         return 'https://www.php-fig.org/psr/psr-2/';
     },
+    'latestPHPTravisEnvironment'         => function($placeholders, $settings) {
+        $env = [];
+        if ($settings['setupUnitTests']) {
+            $env[] = 'UNIT=1';
+        }
+        $env[] = 'PHPLINT=1';
+        if ($settings['setupCodeStandards']) {
+            $env[] = 'PHPCS=1';
+        }
+        if ($settings['setupUnitTests']) {
+            $env[] = 'COVERAGE=1';
+        }
+        return implode(' ', $env);
+    },
+    'minimumPHPTravisEnvironment'        => function($placeholders, $settings) {
+        if ($settings['setupUnitTests']) {
+            return 'UNIT=1 PHPLINT=1';
+        }
+        return 'PHPLINT=1';
+    },
+    'minimumPHPTravisDistribution'       => function($placeholders, $settings) {
+        if (version_compare($settings['minimumPHP'], '5.4', '<')) {
+            return 'precise';
+        }
+        return 'trusty';
+    },
     'wordPressContributorsList'          => function($placeholders, $settings) {
         return str_replace(',', ', ', $settings['wordPressContributors']);
     },
@@ -384,7 +410,8 @@ $composerGenerator = function($placeholders, $settings) {
         $data['require-dev']['dealerdirect/phpcodesniffer-composer-installer'] = '^0.4';
         $data['require-dev']['wp-coding-standards/wpcs']                       = '^1';
 
-        $data['scripts']['phpcs'] = '@php ./vendor/bin/phpcs';
+        $data['scripts']['phplint'] = 'find -L .  -path ./vendor -prune -o -name \'*.php\' -print0 | xargs -0 -n 1 -P 4 php -l';
+        $data['scripts']['phpcs']   = '@php ./vendor/bin/phpcs';
     }
 
     // Require necessary tools for quality assurance setup.
@@ -423,10 +450,12 @@ $composerGenerator = function($placeholders, $settings) {
             $data['autoload-dev']['psr-4'] = [$namespace => 'tests/phpunit/framework'];
         }
 
-        $data['scripts']['phpunit'] = '@php ./vendor/bin/phpunit';
+        $data['scripts']['phpunit']     = '@php ./vendor/bin/phpunit';
+        $data['scripts']['phpunit-cov'] = '@php ./vendor/bin/phpunit --coverage-clover tests/logs/clover.xml';
 
         if (in_array($settings['packageType'], ['plugin', 'theme'], true) && $settings['setupIntegrationTests']) {
-            $data['scripts']['phpunit'] = '@php ./vendor/bin/phpunit -c phpunit-integration.xml.dist';
+            $data['scripts']['phpunit-integration']     = '@php ./vendor/bin/phpunit -c phpunit-integration.xml.dist';
+            $data['scripts']['phpunit-integration-cov'] = '@php ./vendor/bin/phpunit -c phpunit-integration.xml.dist --coverage-clover tests/logs/clover.xml';
         }
     }
 
@@ -492,6 +521,10 @@ $templatePicker = function($settings) {
                 }
             }
         }
+    }
+
+    if (($settings['setupCodeStandards'] || $settings['setupUnitTests']) && $settings['integrateTravisCI']) {
+        $templates['.travis-' . $settings['packageType'] . '.yml'] = '.travis.yml';
     }
 
     return $templates;

@@ -37,6 +37,7 @@ vendor/
 ## Misc
 ############
 
+tests/logs
 bin/
 tmp/
 *.tmp
