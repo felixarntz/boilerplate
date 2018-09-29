@@ -10,6 +10,8 @@ Boilerplate for new libraries, WordPress plugins or themes.
 
 * PHP >= 7.0
 
+Note that this is the requirement for using this boilerplate, not the requirement for the generated packages. Those may require higher versions or also support lower versions, depending on your preferences.
+
 ## Usage
 
 Simply create a new project via Composer, using this repository as a foundation:
@@ -25,16 +27,16 @@ You will be asked for the following project properties:
 * Vendor name
 * Package name
 * Package description
-* Package keywords
+* Package keywords (comma-separated list)
 * Package VCS URL
 * Package URL
 * Author name
 * Author email
 * Author URL
-* Package type (library|plugin)
-* Minimum PHP version
-* Minimum WordPress version
-* Code standard
+* Package type ("library" or "plugin")
+* Minimum PHP version (anything greater than or equal to 5.2)
+* Minimum WordPress version (anything greater than or equal to 3.7)
+* Code standard ("psr2" or "wordpress")
 * Setup code standards?
 * Setup quality assurance?
 * Setup unit tests?
@@ -43,7 +45,7 @@ You will be asked for the following project properties:
 * Integrate with Travis-CI?
 * Prepare for Packagist?
 * Prepare for wordpress.org?
-* WordPress.org contributors
+* WordPress.org contributors (comma-separated list)
 
 Some of these questions will only be asked based on the responses you gave to prior questions. For example, WordPress-related details are only requested if you provided a package type of "plugin" or "theme".
 
