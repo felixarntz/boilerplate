@@ -527,6 +527,10 @@ $templatePicker = function($settings) {
         $templates['.travis-' . $settings['packageType'] . '.yml'] = '.travis.yml';
     }
 
+    if (($settings['setupCodeStandards'] || $settings['setupQualityAssurance'] || $settings['setupUnitTests']) && $settings['integrateCodeClimate']) {
+        $templates['.codeclimate.yml'] = '.codeclimate.yml';
+    }
+
     return $templates;
 };
 
