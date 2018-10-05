@@ -27,7 +27,11 @@ trait GetPlaceholderValuesTrait
      * @param array $settings                  Map of $setting => $value pairs.
      * @return array Map of $placeholder => $value pairs.
      */
-    protected function getPlaceholderValues(array $placeholdersData, array $generatedPlaceholdersData, array $settings) : array
+    protected function getPlaceholderValues(
+        array $placeholdersData,
+        array $generatedPlaceholdersData,
+        array $settings
+    ) : array
     {
         $placeholders = [];
 

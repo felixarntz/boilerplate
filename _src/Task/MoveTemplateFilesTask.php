@@ -37,6 +37,8 @@ class MoveTemplateFilesTask extends AbstractTask implements ConfigAware
      * Completes the task.
      *
      * @since 1.0.0
+     *
+     * @throws RuntimeException Thrown if template files cannot be moved.
      */
     public function complete()
     {
