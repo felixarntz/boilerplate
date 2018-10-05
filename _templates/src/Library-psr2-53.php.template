@@ -1,0 +1,20 @@
+<?php
+/**
+ * Class {{codeVendorNamespace}}\{{codePackageNamespace}}\Library
+ *
+ * @package {{codeVendorNamespace}}\{{codePackageNamespace}}
+ * @license GNU General Public License, version 2
+ * @link    {{packageUrl}}
+ */
+
+namespace {{codeVendorNamespace}}\{{codePackageNamespace}};
+
+/**
+ * Main class for the library.
+ *
+ * @since 1.0.0
+ */
+class Library
+{
+
+}

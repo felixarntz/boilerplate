@@ -1,0 +1,20 @@
+<?php
+/**
+ * Class {{codeVendorNamespace}}\{{codePackageNamespace}}\Plugin
+ *
+ * @package {{codeVendorNamespace}}\{{codePackageNamespace}}
+ * @license GNU General Public License, version 2
+ * @link    {{packageUrl}}
+ */
+
+namespace {{codeVendorNamespace}}\{{codePackageNamespace}};
+
+/**
+ * Main class for the plugin.
+ *
+ * @since 1.0.0
+ */
+class Plugin
+{
+
+}

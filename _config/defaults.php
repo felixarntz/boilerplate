@@ -474,6 +474,20 @@ $templatePicker = function($settings) {
     $templates['.github/ISSUE_TEMPLATE-' . $settings['packageType'] . '.md']        = '.github/ISSUE_TEMPLATE.md';
     $templates['.github/PULL_REQUEST_TEMPLATE-' . $settings['packageType'] . '.md'] = '.github/PULL_REQUEST_TEMPLATE.md';
 
+    if (version_compare($settings['minimumPHP'], '5.3', '<')) {
+        $phpSuffix = '52';
+    } elseif (version_compare($settings['minimumPHP'], '5.3', '<')) {
+        $phpSuffix = '53';
+    } else {
+        $phpSuffix = '70';
+    }
+
+    $templates['src/' . ucfirst($settings['packageType']) . '-' . $settings['codeStandard'] . '-' . $phpSuffix . '.php'] = ucfirst($settings['packageType']) . '.php';
+
+    if ($settings['packageType'] === 'plugin') {
+        $templates['plugin-' . $settings['codeStandard'] . '-' . $phpSuffix . '.php'] = $placeholders['packageNameHyphenLowerCase'] . '.php';
+    }
+
     if (in_array($settings['packageType'], ['plugin', 'theme'], true) && $settings['prepareWordPressOrg']) {
         $templates['license.txt']                                 = 'license.txt';
         $templates['readme-' . $settings['packageType'] . '.txt'] = 'readme.txt';
