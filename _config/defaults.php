@@ -98,7 +98,7 @@ $placeholders = [
         'validation'  => function($placeholder) {
             return Validation::validateEmail($placeholder);
         },
-        'default'     => 'felix-arntz@leaves-and-love.net',
+        'default'     => 'hello@felix-arntz.me',
     ],
     'authorUrl'          => [
         'name'        => 'Author URL',
