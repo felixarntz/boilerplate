@@ -53,3 +53,7 @@ Some of these questions will only be asked based on the responses you gave to pr
 
 * Support for themes is partly available already, however it will only be added as a configuration option once it has been finalized.
 * Note that PHP 5.2 support at this time is limited. For example, the generated test PHP files require PHP 5.3. Support for PHP 5.2 may be added in the future - pull-requests welcome of course!
+
+## Credit
+
+Major credit goes to [@schlessera](https://github.com/schlessera) and his [brightnucleus/boilerplate](https://github.com/brightnucleus/boilerplate) project, which this is a heavily modified version of.
