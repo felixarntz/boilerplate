@@ -61,8 +61,8 @@ class MoveTemplateFilesTask extends AbstractTask implements ConfigAware
         $templates = call_user_func($this->config['templatePicker'], $settings, $placeholders);
         foreach ($templates as $templateFile => $targetFile) {
             $rootPath         = Util::getRootPath();
-            $templateFilePath = $rootPath . '_templates/' . $templateFile;
-            $targetFilePath   = $rootPath . $targetFile;
+            $templateFilePath = $rootPath . '/_templates/' . $templateFile;
+            $targetFilePath   = $rootPath . '/' . $targetFile;
 
             if (!file_exists($templateFilePath)) {
                 continue;

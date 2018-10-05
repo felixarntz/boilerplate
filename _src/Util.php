@@ -158,7 +158,7 @@ class Util
      *
      * @since 1.0.0
      *
-     * @return string Absolute root directory path, including trailing slash.
+     * @return string Absolute root directory path, without trailing slash.
      */
     public static function getRootPath() : string
     {
