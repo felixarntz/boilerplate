@@ -39,7 +39,8 @@
   },
   "scripts":     {
     "post-create-project-cmd": [
-      "FelixArntz\\Boilerplate\\Setup::run"
+      "FelixArntz\\Boilerplate\\Setup::run",
+      "rm -rf _src && composer update"
     ],
     "phpcs": "@php ./_vendor/bin/phpcs",
     "phpmd": "@php ./_vendor/bin/phpmd _src text phpmd.xml.dist"
