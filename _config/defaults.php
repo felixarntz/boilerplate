@@ -462,7 +462,7 @@ $composerGenerator = function($placeholders, $settings) {
     return array_filter($data);
 };
 
-$templatePicker = function($settings) {
+$templatePicker = function($settings, $placeholders) {
     $templates = ['.gitignore' => '.gitignore'];
 
     $templates['.editorconfig-' . $settings['codeStandard']] = '.editorconfig';
@@ -476,13 +476,13 @@ $templatePicker = function($settings) {
 
     if (version_compare($settings['minimumPHP'], '5.3', '<')) {
         $phpSuffix = '52';
-    } elseif (version_compare($settings['minimumPHP'], '5.3', '<')) {
+    } elseif (version_compare($settings['minimumPHP'], '7.0', '<')) {
         $phpSuffix = '53';
     } else {
         $phpSuffix = '70';
     }
 
-    $templates['src/' . ucfirst($settings['packageType']) . '-' . $settings['codeStandard'] . '-' . $phpSuffix . '.php'] = ucfirst($settings['packageType']) . '.php';
+    $templates['src/' . ucfirst($settings['packageType']) . '-' . $settings['codeStandard'] . '-' . $phpSuffix . '.php'] = 'src/' . ucfirst($settings['packageType']) . '.php';
 
     if ($settings['packageType'] === 'plugin') {
         $templates['plugin-' . $settings['codeStandard'] . '-' . $phpSuffix . '.php'] = $placeholders['packageNameHyphenLowerCase'] . '.php';
@@ -553,4 +553,5 @@ return [
     'generatedPlaceholders' => $generatedPlaceholders,
     'settings'              => $settings,
     'composerGenerator'     => $composerGenerator,
+    'templatePicker'        => $templatePicker,
 ];

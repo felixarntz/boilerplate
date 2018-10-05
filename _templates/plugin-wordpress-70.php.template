@@ -7,16 +7,85 @@
  * @link    {{packageUrl}}
  *
  * @wordpress-plugin
- * Plugin Name: WP GDPR Cookie Notice
- * Plugin URI:  https://wordpress.org/plugins/wp-gdpr-cookie-notice/
- * Description: Simple performant GDPR-compliant cookie consent notice that supports granular cookie control and live preview customization.
+ * Plugin Name: {{packageName}}
+ * Plugin URI:  {{packageUrl}}
+ * Description: {{packageDescription}}
  * Version:     1.0.0
- * Author:      Felix Arntz
- * Author URI:  https://leaves-and-love.net
+ * Author:      {{authorName}}
+ * Author URI:  {{authorUrl}}
  * License:     GNU General Public License v2 (or later)
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: wp-gdpr-cookie-notice
- * Tags:        gdpr, cookie notice, cookie consent, granular cookie control, customizer
+ * Text Domain: {{packageNameHyphenLowerCase}}
+ * Tags:        {{packageKeywordsList}}
  */
 
 /* This file must be parseable by PHP 5.2. */
+
+/**
+ * Loads the plugin.
+ *
+ * @since 1.0.0
+ */
+function {{codePackageNameUnderscoreLowerCase}}_load() {
+	if ( version_compare( phpversion(), '{{minimumPHP}}', '<' ) ) {
+		add_action( 'admin_notices', '{{codePackageNameUnderscoreLowerCase}}_display_php_version_notice' );
+		return;
+	}
+
+	if ( version_compare( get_bloginfo( 'version' ), '{{minimumWordPress}}', '<' ) ) {
+		add_action( 'admin_notices', '{{codePackageNameUnderscoreLowerCase}}_display_wp_version_notice' );
+		return;
+	}
+
+	if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+		require __DIR__ . '/vendor/autoload.php';
+	}
+
+	call_user_func( [ '{{codeVendorNamespace}}\\{{codePackageNamespace}}\\Plugin', 'load' ] );
+}
+
+/**
+ * Displays an admin notice about an unmet PHP version requirement.
+ *
+ * @since 1.0.0
+ */
+function {{codePackageNameUnderscoreLowerCase}}_display_php_version_notice() {
+	?>
+	<div class="notice notice-error">
+		<p>
+			<?php
+			sprintf(
+				/* translators: 1: required version, 2: currently used version */
+				__( '{{packageName}} requires at least PHP version %1$s. Your site is currently running on PHP %2$s.', '{{packageNameHyphenLowerCase}}' ),
+				'{{minimumPHP}}',
+				phpversion()
+			);
+			?>
+		</p>
+	</div>
+	<?php
+}
+
+/**
+ * Displays an admin notice about an unmet WordPress version requirement.
+ *
+ * @since 1.0.0
+ */
+function {{codePackageNameUnderscoreLowerCase}}_display_wp_version_notice() {
+	?>
+	<div class="notice notice-error">
+		<p>
+			<?php
+			sprintf(
+				/* translators: 1: required version, 2: currently used version */
+				__( '{{packageName}} requires at least WordPress version %1$s. Your site is currently running on WordPress %2$s.', '{{packageNameHyphenLowerCase}}' ),
+				'{{minimumWordPress}}',
+				get_bloginfo( 'version' )
+			);
+			?>
+		</p>
+	</div>
+	<?php
+}
+
+{{codePackageNameUnderscoreLowerCase}}_load();

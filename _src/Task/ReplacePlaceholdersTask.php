@@ -19,7 +19,7 @@ use Symfony\Component\Finder\Finder;
  */
 class ReplacePlaceholdersTask extends AbstractTask implements ConfigAware
 {
-    use ConfigAwareTrait;
+    use ConfigAwareTrait, GetPlaceholderValuesTrait;
 
     /**
      * Gets the initial status message to show before the task starts execution.
@@ -40,7 +40,17 @@ class ReplacePlaceholdersTask extends AbstractTask implements ConfigAware
      */
     public function complete()
     {
-        $placeholders = $this->getPlaceholderValues();
+        $settings = $this->getSettingValues(
+            !empty($this->config['settings']) ? $this->config['settings'] : []
+        );
+
+        $placeholders = $this->getPlaceholderValues(
+            !empty($this->config['placeholders']) ? $this->config['placeholders'] : [],
+            !empty($this->config['generatedPlaceholders']) ? $this->config['generatedPlaceholders'] : [],
+            $settings
+        );
+
+        $placeholders = array_merge($placeholders, $settings);
 
         $mustache = new Mustache_Engine();
         $finder   = new Finder();
@@ -49,38 +59,5 @@ class ReplacePlaceholdersTask extends AbstractTask implements ConfigAware
             $rendered = $mustache->render($template, $placeholders);
             file_put_contents(substr($file, 0, -strlen('.template')), $rendered);
         }
-    }
-
-    /**
-     * Gets a map of placeholders and their values.
-     *
-     * @since 1.0.0
-     *
-     * @return array Map of $placeholder => $value pairs.
-     */
-    protected function getPlaceholderValues() : array
-    {
-        $placeholders = [];
-
-        if (!empty($this->config['placeholders'])) {
-            foreach ($this->config['placeholders'] as $key => $data) {
-                $placeholders[$key] = $data['value'];
-            }
-        }
-
-        $settings = [];
-        if (!empty($this->config['settings'])) {
-            foreach ($this->config['settings'] as $key => $data) {
-                $settings[$key] = $data['value'];
-            }
-        }
-
-        if (!empty($this->config['generatedPlaceholders'])) {
-            foreach ($this->config['generatedPlaceholders'] as $key => $callback) {
-                $placeholders[$key] = call_user_func($callback, $placeholders, $settings);
-            }
-        }
-
-        return array_merge($placeholders, $settings);
     }
 }

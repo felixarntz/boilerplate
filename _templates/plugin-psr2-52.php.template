@@ -1,0 +1,62 @@
+<?php
+/**
+ * Plugin initialization file
+ *
+ * @package {{codeVendorNamespace}}\{{codePackageNamespace}}
+ * @license GNU General Public License, version 2
+ * @link    {{packageUrl}}
+ *
+ * @wordpress-plugin
+ * Plugin Name: {{packageName}}
+ * Plugin URI:  {{packageUrl}}
+ * Description: {{packageDescription}}
+ * Version:     1.0.0
+ * Author:      {{authorName}}
+ * Author URI:  {{authorUrl}}
+ * License:     GNU General Public License v2 (or later)
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: {{packageNameHyphenLowerCase}}
+ * Tags:        {{packageKeywordsList}}
+ */
+
+/**
+ * Loads the plugin.
+ *
+ * @since 1.0.0
+ */
+function {{codePackageNameCamelCase}}Load()
+{
+    if (version_compare(get_bloginfo('version'), '{{minimumWordPress}}', '<')) {
+        add_action('admin_notices', '{{codePackageNameCamelCase}}DisplayWPVersionNotice');
+        return;
+    }
+
+    require_once plugin_dir_path(__FILE__) . 'src/Plugin.php';
+
+    {{codePackageNamespace}}Plugin::load();
+}
+
+/**
+ * Displays an admin notice about an unmet WordPress version requirement.
+ *
+ * @since 1.0.0
+ */
+function {{codePackageNameCamelCase}}DisplayWPVersionNotice()
+{
+    ?>
+    <div class="notice notice-error">
+        <p>
+            <?php
+            sprintf(
+                /* translators: 1: required version, 2: currently used version */
+                __('{{packageName}} requires at least WordPress version %1$s. Your site is currently running on WordPress %2$s.', '{{packageNameHyphenLowerCase}}'),
+                '{{minimumWordPress}}',
+                get_bloginfo('version')
+            );
+            ?>
+        </p>
+    </div>
+    <?php
+}
+
+{{codePackageNameCamelCase}}Load();
