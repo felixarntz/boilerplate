@@ -13,18 +13,13 @@
     <!-- WordPress Coding Standard -->
     <rule ref="WordPress">
         <exclude name="WordPress.VIP.RestrictedFunctions"/>
+        <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
     </rule>
 
     <!-- Selected WordPress Coding Standards tweaks -->
     <rule ref="WordPress.WP.I18n">
         <properties>
             <property name="text_domain" type="string" value="{{packageNameHyphenLowerCase}}"/>
-        </properties>
-    </rule>
-
-    <rule ref="WordPress.Files.FileName">
-        <properties>
-            <property name="strict_class_file_names" value="false" />
         </properties>
     </rule>
 </ruleset>
