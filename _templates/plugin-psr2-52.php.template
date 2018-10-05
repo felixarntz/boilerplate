@@ -33,7 +33,7 @@ function {{codePackageNameCamelCase}}Load()
 
     require_once plugin_dir_path(__FILE__) . 'src/Plugin.php';
 
-    {{codePackageNamespace}}Plugin::load();
+    {{codePackageNamespace}}Plugin::load(__FILE__);
 }
 
 /**

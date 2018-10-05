@@ -32,7 +32,7 @@ function {{codePackageNameUnderscoreLowerCase}}_load() {
 
 	require_once plugin_dir_path( __FILE__ ) . 'src/Plugin.php';
 
-	{{codePackageNamespace}}_Plugin::load();
+	{{codePackageNamespace}}_Plugin::load( __FILE__ );
 }
 
 /**
