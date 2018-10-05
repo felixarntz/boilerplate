@@ -19,7 +19,7 @@ use RuntimeException;
  */
 class GenerateComposerJsonTask extends AbstractTask implements ConfigAware
 {
-    use ConfigAwareTrait;
+    use ConfigAwareTrait, GetPlaceholderValuesTrait;
 
     /**
      * Gets the initial status message to show before the task starts execution.
@@ -46,8 +46,15 @@ class GenerateComposerJsonTask extends AbstractTask implements ConfigAware
             throw new RuntimeException('Missing required composer generator function in configuration.');
         }
 
-        $placeholders = $this->getPlaceholderValues();
-        $settings     = $this->getSettingValues();
+        $settings = $this->getSettingValues(
+            !empty($this->config['settings']) ? $this->config['settings'] : []
+        );
+
+        $placeholders = $this->getPlaceholderValues(
+            !empty($this->config['placeholders']) ? $this->config['placeholders'] : [],
+            !empty($this->config['generatedPlaceholders']) ? $this->config['generatedPlaceholders'] : [],
+            $settings
+        );
 
         $composerData = call_user_func($this->config['composerGenerator'], $placeholders, $settings);
         $composerData = json_encode($composerData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
@@ -58,51 +65,5 @@ class GenerateComposerJsonTask extends AbstractTask implements ConfigAware
         }, $composerData);
 
         file_put_contents(Util::getAbsolutePath('composer.json'), $composerData);
-    }
-
-    /**
-     * Gets a map of placeholders and their values.
-     *
-     * @since 1.0.0
-     *
-     * @return array Map of $placeholder => $value pairs.
-     */
-    protected function getPlaceholderValues() : array
-    {
-        $placeholders = [];
-
-        if (!empty($this->config['placeholders'])) {
-            foreach ($this->config['placeholders'] as $key => $data) {
-                $placeholders[$key] = $data['value'];
-            }
-        }
-
-        if (!empty($this->config['generatedPlaceholders'])) {
-            foreach ($this->config['generatedPlaceholders'] as $key => $callback) {
-                $placeholders[$key] = call_user_func($callback, $this->config['placeholders']);
-            }
-        }
-
-        return $placeholders;
-    }
-
-    /**
-     * Gets a map of settings and their values.
-     *
-     * @since 1.0.0
-     *
-     * @return array Map of $setting => $value pairs.
-     */
-    protected function getSettingValues() : array
-    {
-        $settings = [];
-
-        if (!empty($this->config['settings'])) {
-            foreach ($this->config['settings'] as $key => $data) {
-                $settings[$key] = $data['value'];
-            }
-        }
-
-        return $settings;
     }
 }
