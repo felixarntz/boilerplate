@@ -54,7 +54,7 @@ class ReplacePlaceholdersTask extends AbstractTask implements ConfigAware
 
         $mustache = new Mustache_Engine();
         $finder   = new Finder();
-        foreach ($finder->files()->in('_templates')->name('/\.template$/') as $file) {
+        foreach ($finder->files()->ignoreDotFiles(false)->in('_templates')->name('/\.template$/') as $file) {
             $template = file_get_contents($file);
             $rendered = $mustache->render($template, $placeholders);
             file_put_contents(substr($file, 0, -strlen('.template')), $rendered);
