@@ -20,6 +20,7 @@ matrix:
       env: UNIT=1
 {{/setupUnitTests}}
 before_install:
+{{#setupUnitTests}}
 {{#integrateCodeClimate}}
   - |
     if [[ -z "$CC_TEST_REPORTER_ID" ]]; then
@@ -32,6 +33,7 @@ before_install:
       ./cc-test-reporter before-build
     fi
 {{/integrateCodeClimate}}
+{{/setupUnitTests}}
   - |
     if [[ "$COVERAGE" != "1" ]]; then
       stable='^[0-9\.]+$'
@@ -83,11 +85,13 @@ script:
         $PHPUNIT_BIN
       fi
     fi
+{{#integrateCodeClimate}}
 after_script:
   - |
     if [[ "$COVERAGE" == "1" ]]; then
       ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
     fi
+{{/integrateCodeClimate}}
 {{/setupUnitTests}}
 notifications:
   email: false
