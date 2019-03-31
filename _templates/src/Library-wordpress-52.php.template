@@ -3,7 +3,7 @@
  * Class {{codePackageNamespace}}_Library
  *
  * @package {{codeVendorNamespace}}\{{codePackageNamespace}}
- * @license GNU General Public License, version 2
+ * @license GNU General Public License v2 (or later)
  * @link    {{packageUrl}}
  */
 

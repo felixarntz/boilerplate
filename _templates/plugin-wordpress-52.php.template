@@ -3,7 +3,7 @@
  * Plugin initialization file
  *
  * @package {{codeVendorNamespace}}\{{codePackageNamespace}}
- * @license GNU General Public License, version 2
+ * @license GNU General Public License v2 (or later)
  * @link    {{packageUrl}}
  *
  * @wordpress-plugin
@@ -24,14 +24,14 @@
  * @since 1.0.0
  */
 function {{codePackageNameUnderscoreLowerCase}}_load() {
-	if ( version_compare( get_bloginfo( 'version' ), '{{minimumWordPress}}', '<' ) ) {
-		add_action( 'admin_notices', '{{codePackageNameUnderscoreLowerCase}}_display_wp_version_notice' );
-		return;
-	}
+    if ( version_compare( get_bloginfo( 'version' ), '{{minimumWordPress}}', '<' ) ) {
+        add_action( 'admin_notices', '{{codePackageNameUnderscoreLowerCase}}_display_wp_version_notice' );
+        return;
+    }
 
-	require_once plugin_dir_path( __FILE__ ) . 'src/Plugin.php';
+    require_once plugin_dir_path( __FILE__ ) . 'src/Plugin.php';
 
-	{{codePackageNamespace}}_Plugin::load( __FILE__ );
+    {{codePackageNamespace}}_Plugin::load( __FILE__ );
 }
 
 /**
@@ -40,20 +40,20 @@ function {{codePackageNameUnderscoreLowerCase}}_load() {
  * @since 1.0.0
  */
 function {{codePackageNameUnderscoreLowerCase}}_display_wp_version_notice() {
-	?>
-	<div class="notice notice-error">
-		<p>
-			<?php
-			sprintf(
-				/* translators: 1: required version, 2: currently used version */
-				__( '{{packageName}} requires at least WordPress version %1$s. Your site is currently running on WordPress %2$s.', '{{packageNameHyphenLowerCase}}' ),
-				'{{minimumWordPress}}',
-				get_bloginfo( 'version' )
-			);
-			?>
-		</p>
-	</div>
-	<?php
+    ?>
+    <div class="notice notice-error">
+        <p>
+            <?php
+            sprintf(
+                /* translators: 1: required version, 2: currently used version */
+                __( '{{packageName}} requires at least WordPress version %1$s. Your site is currently running on WordPress %2$s.', '{{packageNameHyphenLowerCase}}' ),
+                '{{minimumWordPress}}',
+                get_bloginfo( 'version' )
+            );
+            ?>
+        </p>
+    </div>
+    <?php
 }
 
 {{codePackageNameUnderscoreLowerCase}}_load();

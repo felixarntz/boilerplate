@@ -3,7 +3,7 @@
  * Class {{codeVendorNamespace}}\{{codePackageNamespace}}\Tests\PHPUnit\Integration\Sample_Tests
  *
  * @package {{codeVendorNamespace}}\{{codePackageNamespace}}
- * @license GNU General Public License, version 2
+ * @license GNU General Public License v2 (or later)
  * @link    {{packageUrl}}
  */
 
@@ -16,10 +16,10 @@ use {{codeVendorNamespace}}\{{codePackageNamespace}}\Tests\PHPUnit\Framework\Int
  */
 class Sample_Tests extends Integration_Test_Case {
 
-	/**
-	 * Performs a sample test.
-	 */
-	public function testNothingUseful() {
-		$this->assertTrue( defined( 'ABSPATH' ) );
-	}
+    /**
+     * Performs a sample test.
+     */
+    public function testNothingUseful() {
+        $this->assertTrue( defined( 'ABSPATH' ) );
+    }
 }

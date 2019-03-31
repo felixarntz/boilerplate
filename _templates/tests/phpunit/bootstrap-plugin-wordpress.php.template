@@ -3,7 +3,7 @@
  * Unit tests bootstrap script.
  *
  * @package {{codeVendorNamespace}}\{{codePackageNamespace}}
- * @license GNU General Public License, version 2
+ * @license GNU General Public License v2 (or later)
  * @link    {{packageUrl}}
  */
 
@@ -12,7 +12,7 @@ define( 'TESTS_PLUGIN_DIR', dirname( dirname( __DIR__ ) ) );
 
 // Disable xdebug backtrace.
 if ( function_exists( 'xdebug_disable' ) ) {
-	xdebug_disable();
+    xdebug_disable();
 }
 
 require_once TESTS_PLUGIN_DIR . '/vendor/autoload.php';

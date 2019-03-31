@@ -3,7 +3,7 @@
  * Class FelixArntz\Boilerplate\Task\VerifyConfigurationTask
  *
  * @package FelixArntz\Boilerplate
- * @license GNU General Public License, version 2
+ * @license GNU General Public License v2 (or later)
  * @link    https://github.com/felixarntz/boilerplate
  */
 
