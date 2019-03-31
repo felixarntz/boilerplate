@@ -16,10 +16,10 @@ use {{codeVendorNamespace}}\{{codePackageNamespace}}\Tests\PHPUnit\Framework\Uni
  */
 class Sample_Tests extends Unit_Test_Case {
 
-    /**
-     * Performs a sample test.
-     */
-    public function testNothingUseful() {
-        $this->assertTrue( true );
-    }
+	/**
+	 * Performs a sample test.
+	 */
+	public function testNothingUseful() {
+		$this->assertTrue( true );
+	}
 }

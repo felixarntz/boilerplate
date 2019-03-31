@@ -1,0 +1,118 @@
+<?php
+/**
+ * Theme initialization functions
+ *
+ * @package {{codeVendorNamespace}}\{{codePackageNamespace}}
+ * @license GNU General Public License v2 (or later)
+ * @link    {{packageUrl}}
+ */
+
+/* This file must be parseable by PHP 5.2. */
+
+/**
+ * Loads the theme.
+ *
+ * @since 1.0.0
+ */
+function {{codePackageNameUnderscoreLowerCase}}_load() {
+	if ( version_compare( phpversion(), '{{minimumPHP}}', '<' ) ) {
+		$GLOBALS['{{codePackageNameUnderscoreLowerCase}}_version_notice'] = sprintf(
+			/* translators: 1: required version, 2: currently used version */
+			__( '{{packageName}} requires at least PHP version %1$s. Your site is currently running on PHP %2$s.', '{{packageNameHyphenLowerCase}}' ),
+			'{{minimumPHP}}',
+			phpversion()
+		);
+		add_action( 'admin_notices', '{{codePackageNameUnderscoreLowerCase}}_display_version_notice' );
+		add_action( 'template_redirect', '{{codePackageNameUnderscoreLowerCase}}_bail_on_frontend' );
+		add_action( 'load-customize.php', '{{codePackageNameUnderscoreLowerCase}}_bail_on_customize' );
+		return;
+	}
+
+	if ( version_compare( get_bloginfo( 'version' ), '{{minimumWordPress}}', '<' ) ) {
+		$GLOBALS['{{codePackageNameUnderscoreLowerCase}}_version_notice'] = sprintf(
+			/* translators: 1: required version, 2: currently used version */
+			__( '{{packageName}} requires at least WordPress version %1$s. Your site is currently running on WordPress %2$s.', '{{packageNameHyphenLowerCase}}' ),
+			'{{minimumWordPress}}',
+			get_bloginfo( 'version' )
+		);
+		add_action( 'admin_notices', '{{codePackageNameUnderscoreLowerCase}}_display_version_notice' );
+		add_action( 'template_redirect', '{{codePackageNameUnderscoreLowerCase}}_bail_on_frontend' );
+		add_action( 'load-customize.php', '{{codePackageNameUnderscoreLowerCase}}_bail_on_customize' );
+		return;
+	}
+
+	if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+		require __DIR__ . '/vendor/autoload.php';
+	}
+
+	call_user_func( [ '{{codeVendorNamespace}}\\{{codePackageNamespace}}\\Theme', 'load' ], __FILE__ );
+}
+
+/**
+ * Displays an admin notice about an unmet version requirement.
+ *
+ * @since 1.0.0
+ *
+ * @global string ${{codePackageNameUnderscoreLowerCase}}_version_notice Message about unmet version requirement.
+ */
+function {{codePackageNameUnderscoreLowerCase}}_display_version_notice() {
+	global ${{codePackageNameUnderscoreLowerCase}}_version_notice;
+
+	if ( empty( ${{codePackageNameUnderscoreLowerCase}}_version_notice ) ) {
+		return;
+	}
+
+	?>
+	<div class="notice notice-error">
+		<p>
+			<?php echo esc_html( ${{codePackageNameUnderscoreLowerCase}}_version_notice ); ?>
+		</p>
+	</div>
+	<?php
+}
+
+/**
+ * Prevents the frontend from being loaded when version requirements are not met.
+ *
+ * @since 1.0.0
+ *
+ * @global string ${{codePackageNameUnderscoreLowerCase}}_version_notice Message about unmet version requirement.
+ */
+function {{codePackageNameUnderscoreLowerCase}}_bail_on_frontend() {
+	global ${{codePackageNameUnderscoreLowerCase}}_version_notice;
+
+	if ( empty( ${{codePackageNameUnderscoreLowerCase}}_version_notice ) ) {
+		return;
+	}
+
+	if ( ! current_user_can( 'switch_themes' ) ) {
+		die();
+	}
+
+	wp_die( esc_html( ${{codePackageNameUnderscoreLowerCase}}_version_notice ) );
+}
+
+/**
+ * Prevents the Customizer from being loaded when version requirements are not met.
+ *
+ * @since 1.0.0
+ *
+ * @global string ${{codePackageNameUnderscoreLowerCase}}_version_notice Message about unmet version requirement.
+ */
+function {{codePackageNameUnderscoreLowerCase}}_bail_on_customize() {
+	global ${{codePackageNameUnderscoreLowerCase}}_version_notice;
+
+	if ( empty( ${{codePackageNameUnderscoreLowerCase}}_version_notice ) ) {
+		return;
+	}
+
+	wp_die(
+		esc_html( ${{codePackageNameUnderscoreLowerCase}}_version_notice ),
+		'',
+		array(
+			'back_link' => true,
+		)
+	);
+}
+
+{{codePackageNameUnderscoreLowerCase}}_load();

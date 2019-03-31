@@ -26,21 +26,21 @@
  * @since 1.0.0
  */
 function {{codePackageNameUnderscoreLowerCase}}_load() {
-    if ( version_compare( phpversion(), '{{minimumPHP}}', '<' ) ) {
-        add_action( 'admin_notices', '{{codePackageNameUnderscoreLowerCase}}_display_php_version_notice' );
-        return;
-    }
+	if ( version_compare( phpversion(), '{{minimumPHP}}', '<' ) ) {
+		add_action( 'admin_notices', '{{codePackageNameUnderscoreLowerCase}}_display_php_version_notice' );
+		return;
+	}
 
-    if ( version_compare( get_bloginfo( 'version' ), '{{minimumWordPress}}', '<' ) ) {
-        add_action( 'admin_notices', '{{codePackageNameUnderscoreLowerCase}}_display_wp_version_notice' );
-        return;
-    }
+	if ( version_compare( get_bloginfo( 'version' ), '{{minimumWordPress}}', '<' ) ) {
+		add_action( 'admin_notices', '{{codePackageNameUnderscoreLowerCase}}_display_wp_version_notice' );
+		return;
+	}
 
-    if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
-        require __DIR__ . '/vendor/autoload.php';
-    }
+	if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+		require __DIR__ . '/vendor/autoload.php';
+	}
 
-    call_user_func( array( '{{codeVendorNamespace}}\\{{codePackageNamespace}}\\Plugin', 'load' ), __FILE__ );
+	call_user_func( array( '{{codeVendorNamespace}}\\{{codePackageNamespace}}\\Plugin', 'load' ), __FILE__ );
 }
 
 /**
@@ -49,20 +49,20 @@ function {{codePackageNameUnderscoreLowerCase}}_load() {
  * @since 1.0.0
  */
 function {{codePackageNameUnderscoreLowerCase}}_display_php_version_notice() {
-    ?>
-    <div class="notice notice-error">
-        <p>
-            <?php
-            sprintf(
-                /* translators: 1: required version, 2: currently used version */
-                __( '{{packageName}} requires at least PHP version %1$s. Your site is currently running on PHP %2$s.', '{{packageNameHyphenLowerCase}}' ),
-                '{{minimumPHP}}',
-                phpversion()
-            );
-            ?>
-        </p>
-    </div>
-    <?php
+	?>
+	<div class="notice notice-error">
+		<p>
+			<?php
+			sprintf(
+				/* translators: 1: required version, 2: currently used version */
+				__( '{{packageName}} requires at least PHP version %1$s. Your site is currently running on PHP %2$s.', '{{packageNameHyphenLowerCase}}' ),
+				'{{minimumPHP}}',
+				phpversion()
+			);
+			?>
+		</p>
+	</div>
+	<?php
 }
 
 /**
@@ -71,20 +71,20 @@ function {{codePackageNameUnderscoreLowerCase}}_display_php_version_notice() {
  * @since 1.0.0
  */
 function {{codePackageNameUnderscoreLowerCase}}_display_wp_version_notice() {
-    ?>
-    <div class="notice notice-error">
-        <p>
-            <?php
-            sprintf(
-                /* translators: 1: required version, 2: currently used version */
-                __( '{{packageName}} requires at least WordPress version %1$s. Your site is currently running on WordPress %2$s.', '{{packageNameHyphenLowerCase}}' ),
-                '{{minimumWordPress}}',
-                get_bloginfo( 'version' )
-            );
-            ?>
-        </p>
-    </div>
-    <?php
+	?>
+	<div class="notice notice-error">
+		<p>
+			<?php
+			sprintf(
+				/* translators: 1: required version, 2: currently used version */
+				__( '{{packageName}} requires at least WordPress version %1$s. Your site is currently running on WordPress %2$s.', '{{packageNameHyphenLowerCase}}' ),
+				'{{minimumWordPress}}',
+				get_bloginfo( 'version' )
+			);
+			?>
+		</p>
+	</div>
+	<?php
 }
 
 {{codePackageNameUnderscoreLowerCase}}_load();

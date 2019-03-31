@@ -12,7 +12,7 @@ define( 'TESTS_PLUGIN_DIR', dirname( dirname( __DIR__ ) ) );
 
 // Disable xdebug backtrace.
 if ( function_exists( 'xdebug_disable' ) ) {
-    xdebug_disable();
+	xdebug_disable();
 }
 
 require_once TESTS_PLUGIN_DIR . '/vendor/autoload.php';

@@ -1,0 +1,18 @@
+<?php
+/**
+ * Class {{codePackageNamespace}}Theme
+ *
+ * @package {{codeVendorNamespace}}\{{codePackageNamespace}}
+ * @license GNU General Public License v2 (or later)
+ * @link    {{packageUrl}}
+ */
+
+/**
+ * Main class for the theme.
+ *
+ * @since 1.0.0
+ */
+class {{codePackageNamespace}}Theme
+{
+
+}

@@ -221,7 +221,7 @@ $settings = [
     'packageType'           => [
         'name'        => 'Package type',
         'description' => 'The type of the package.',
-        'choices'     => ['library', 'plugin'], // Add 'theme' in here once supported.
+        'choices'     => ['library', 'plugin', 'theme'],
         'default'     => 'library',
     ],
     'minimumPHP'            => [
@@ -486,6 +486,9 @@ $templatePicker = function($settings, $placeholders) {
 
     if ($settings['packageType'] === 'plugin') {
         $templates['plugin-' . $settings['codeStandard'] . '-' . $phpSuffix . '.php'] = $placeholders['packageNameHyphenLowerCase'] . '.php';
+    } elseif ($settings['packageType'] === 'theme') {
+        $templates['functions-' . $settings['codeStandard'] . '-' . $phpSuffix . '.php'] = 'functions.php';
+        $templates['style.css']                                                          = 'style.css';
     }
 
     if (in_array($settings['packageType'], ['plugin', 'theme'], true) && $settings['prepareWordPressOrg']) {
