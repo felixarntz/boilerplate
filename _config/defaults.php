@@ -227,13 +227,13 @@ $settings = [
     'minimumPHP'            => [
         'name'        => 'Minimum PHP version',
         'description' => 'The minimum required PHP version of the package.',
-        'choices'     => array_merge(Util::versionRange('5.2', '5.6'), Util::versionRange('7.0', '7.2')),
+        'choices'     => array_merge(Util::versionRange('5.2', '5.6'), Util::versionRange('7.0', '7.4')),
         'default'     => '7.0',
     ],
     'minimumWordPress'      => [
         'name'        => 'Minimum WordPress version',
         'description' => 'The minimum required WordPress version of the package.',
-        'choices'     => array_merge(Util::versionRange('3.7', '4.9'), Util::versionRange('4.9.1', '4.9.9', 'patch')),
+        'choices'     => Util::versionRange('3.7', '5.2'),
         'default'     => '4.7',
         'skip'        => function($settings) {
             return !in_array($settings['packageType']['value'], ['plugin', 'theme'], true);
