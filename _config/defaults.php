@@ -408,7 +408,7 @@ $composerGenerator = function($placeholders, $settings) {
     if ($settings['setupCodeStandards']) {
         $data['require-dev']['squizlabs/php_codesniffer']                      = '^3.3';
         $data['require-dev']['dealerdirect/phpcodesniffer-composer-installer'] = '^0.4';
-        $data['require-dev']['wp-coding-standards/wpcs']                       = '^1';
+        $data['require-dev']['wp-coding-standards/wpcs']                       = '^2';
 
         $data['scripts']['phplint'] = 'find -L .  -path ./vendor -prune -o -name \'*.php\' -print0 | xargs -0 -n 1 -P 4 php -l';
         $data['scripts']['phpcs']   = '@php ./vendor/bin/phpcs';
