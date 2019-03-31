@@ -51,8 +51,7 @@ Some of these questions will only be asked based on the responses you gave to pr
 
 ### Disclaimer
 
-* Support for themes is partly available already, however it will only be added as a configuration option once it has been finalized.
-* Note that PHP 5.2 support at this time is limited. For example, the generated test PHP files require PHP 5.3. Support for PHP 5.2 may be added in the future - pull-requests welcome of course!
+* PHP 5.2 support at this time is available, but limited. Due to WordPress core dropping support for that version anyway, it is unlikely that better support will be added.
 
 ## Credit
 
