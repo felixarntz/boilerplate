@@ -16,4 +16,129 @@ namespace {{codeVendorNamespace}}\{{codePackageNamespace}};
  */
 class Theme {
 
+	/**
+	 * Absolute path to the theme functions file.
+	 *
+	 * @since 1.0.0
+	 * @var string
+	 */
+	protected $main_file;
+
+	/**
+	 * Mode of how the theme is used. Either 'template' or 'stylesheet' (if a child theme).
+	 *
+	 * @since 1.0.0
+	 * @var string
+	 */
+	protected $mode;
+
+	/**
+	 * Main instance of the theme.
+	 *
+	 * @since 1.0.0
+	 * @var Theme|null
+	 */
+	protected static $instance = null;
+
+	/**
+	 * Sets the theme functions file.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $main_file Absolute path to the theme functions file.
+	 */
+	public function __construct( $main_file ) {
+		$this->main_file = $main_file;
+
+		if ( get_stylesheet() !== get_template() && 0 === strpos( $this->main_file, get_stylesheet_directory() ) ) {
+			$this->mode = 'stylesheet';
+		} else {
+			$this->mode = 'template';
+		}
+	}
+
+	/**
+	 * Registers the theme with WordPress.
+	 *
+	 * @since 1.0.0
+	 */
+	public function register() {
+		// TODO: Add hooks here.
+	}
+
+	/**
+	 * Gets the theme slug, which matches the theme directory name.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string Theme slug.
+	 */
+	public function slug() {
+		return call_user_func( "get_{$this->mode}" );
+	}
+
+	/**
+	 * Gets the absolute path for a path relative to the theme directory.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $relative_path Optional. Relative path. Default '/'.
+	 * @return string Absolute path.
+	 */
+	public function path( $relative_path = '/' ) {
+		return call_user_func( "get_{$this->mode}_directory" ) . '/' . ltrim( $relative_path, '/' );
+	}
+
+	/**
+	 * Gets the full URL for a path relative to the theme directory.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $relative_path Optional. Relative path. Default '/'.
+	 * @return string Full URL.
+	 */
+	public function url( $relative_path = '/' ) {
+		return call_user_func( "get_{$this->mode}_directory_uri" ) . '/' . ltrim( $relative_path, '/' );
+	}
+
+	/**
+	 * Checks whether the theme is being used as a child theme.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return bool True if a child theme, false otherwise.
+	 */
+	public function is_child_theme() {
+		return 'stylesheet' === $this->mode;
+	}
+
+	/**
+	 * Retrieves the main instance of the theme.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return Theme Theme main instance.
+	 */
+	public static function instance() {
+		return static::$instance;
+	}
+
+	/**
+	 * Loads the theme main instance and initializes it.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $main_file Absolute path to the theme functions file.
+	 * @return bool True if the theme main instance could be loaded, false otherwise.
+	 */
+	public static function load( $main_file ) {
+		if ( null !== static::$instance ) {
+			return false;
+		}
+
+		static::$instance = new static( $main_file );
+		static::$instance->register();
+
+		return true;
+	}
 }
