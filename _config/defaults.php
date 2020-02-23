@@ -233,8 +233,8 @@ $settings = [
     'minimumWordPress'      => [
         'name'        => 'Minimum WordPress version',
         'description' => 'The minimum required WordPress version of the package.',
-        'choices'     => Util::versionRange('3.7', '5.2'),
-        'default'     => '4.7',
+        'choices'     => Util::versionRange('3.7', '5.3'),
+        'default'     => '5.0',
         'skip'        => function($settings) {
             return !in_array($settings['packageType']['value'], ['plugin', 'theme'], true);
         },
