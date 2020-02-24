@@ -377,6 +377,8 @@ $composerGenerator = function($placeholders, $settings) {
     if (version_compare($settings['minimumPHP'], '5.3', '>=')) {
         $namespace = $placeholders['codeVendorNamespace'] . '\\'
             . $placeholders['codePackageNamespace'] . '\\';
+        $prefix    = str_replace('\\', '_', $placeholders['codeVendorNamespace']) . '_'
+            . str_replace('\\', '_', $placeholders['codePackageNamespace']) . '_';
 
         $data['autoload']['psr-4'] = [$namespace => 'src'];
 
@@ -391,9 +393,11 @@ $composerGenerator = function($placeholders, $settings) {
 
             $data['extra'] = [
                 'mozart' => [
-                    'dep_namespace' => $namespace . 'Dependencies\\',
-                    'dep_directory' => '/dependencies/',
-                    'packages'      => [],
+                    'dep_namespace'      => $namespace . 'Dependencies\\',
+                    'dep_directory'      => '/src/dependencies/',
+                    'classmap_directory' => '/classes/dependencies/',
+                    'classmap_prefix'    => $prefix,
+                    'packages'           => [],
                 ],
             ];
         }
